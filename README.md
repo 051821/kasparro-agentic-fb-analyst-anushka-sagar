@@ -1,327 +1,223 @@
+## Agentic Facebook Ads Performance Analyst
+## Kasparro — Applied AI Engineer Assignment (by Anushka Sagar)
 
-Agentic Facebook Performance Analyst
+*This project is my implementation of a multi-agent AI system that behaves like a smart Facebook Ads Performance Analyst.*
+It automatically:
 
-A Multi-Agent System for Diagnosing ROAS Fluctuations & Generating Creative Recommendations
+Detects why ROAS changed
 
-📌 1. Project Summary
+Finds what caused metric fluctuations
 
-This project builds an Agentic AI System capable of autonomously analyzing Facebook Ads performance.
-Given any marketer’s query such as:
+Generates creative messaging ideas for low-CTR ads
 
-“Analyze ROAS drop in last 7 days”
+Produces a final marketing report
 
-the system performs a fully automated pipeline:
+Everything runs end-to-end using LangChain + Ollama (local LLM), making it fully open-source and offline-friendly.
 
-Understands the query
+ **Quick Start**
+1️⃣ Create a virtual environment
+python -m venv venv
+source venv/bin/activate        # Windows → venv\Scripts\activate
 
-Loads & summarizes data
+2️⃣ Install dependencies
+pip install -r requirements.txt
 
-Generates hypotheses for ROAS change
-
-Validates them quantitatively
-
-Creates improved ad creatives for low-CTR segments
-
-Produces a final structured report
-
-It demonstrates how LLMs + LangChain + multi-agent workflows can replicate a real Marketing Performance Analyst.
-
-🧠 2. Core Capabilities
-✔ Diagnose ROAS change
-
-Identifies why ROAS increased or decreased using signals like:
-
-CTR drop
-
-High impressions but low clicks
-
-Audience fatigue
-
-Underperforming creatives
-
-Country-level performance issues
-
-Spend scaling inefficiencies
-
-✔ Generate analytical hypotheses
-
-Agents use dataset summaries to form grounded insights, not hallucinated ones.
-
-✔ Validate hypotheses
-
-Quantitative evaluation using:
-
-ROAS before vs after time window
-
-Spend vs revenue ratio
-
-CTR changes
-
-Purchase trends
-
-✔ Recommend new creatives
-
-LLM proposes:
-
-3–5 new headlines
-
-CTA improvements
-
-Messaging variations
-
-Hooks based on past creative themes
-
-⚙️ 3. Technology Stack
-Component	Purpose
-Python 3.10+	Core runtime
-LangChain	Prompting, output parsing, agent modules
-Ollama	Local LLM inference (Llama 3 / Mistral / Llama 2)
-Pandas	Data processing
-PyYAML	Config loading
-Loguru	Logging
-pytest	Testing
-
-The system runs fully locally, no API keys or paid cloud required.
-
-📁 4. Project Structure
-.
-|-- README.md
-|-- config
-|   `-- config.yml
-|-- data
-|   |-- Synthetic_fb_ads.csv
-|-- prompts
-|-- reports
-|-- requirements.txt
-|-- src
-|   |-- agents
-|   |-- orchestrator
-|   |-- run.py
-|   `-- utils
-|-- tests
-
-
-Everything is cleanly modularized for easier evaluation.
-
-🔷 5. Multi-Agent Architecture
-
-The system contains five autonomous agents, each with a clear responsibility.
-
-🧩 (A) Planner Agent
-
-📌 Responsible for:
-Understanding the user query and converting it into a structured JSON task plan.
-
-📤 Outputs include:
-
-Task type
-
-Time window
-
-Steps to execute
-
-Filters (campaign/country/audience)
-
-This provides a deterministic structure that the entire workflow follows.
-
-🗂 (B) Data Agent
-
-📌 Responsible for:
-Loading CSV → applying filters → generating dataset summary.
-
-It produces:
-
-Total spend, clicks, revenue
-
-CTR & ROAS calculations
-
-Creative performance buckets
-
-Audience-level stats
-
-This summary is passed to the Insight Agent.
-
-🔍 (C) Insight Agent
-
-📌 Responsible for:
-Using the summary to generate hypotheses explaining ROAS fluctuations.
-
-Example hypotheses:
-
-“ROAS declined due to CTR dropping 22% in retargeting.”
-
-“Audience fatigue from repeated creatives.”
-
-“Spend scaled too quickly without incremental revenue.”
-
-Outputs strict JSON with:
-
-ID
-
-Description
-
-Expected signals
-
-Affected segment
-
-📈 (D) Evaluator Agent
-
-📌 Responsible for:
-Validating each hypothesis using the original dataset.
-
-Evaluation includes:
-
-ROAS before vs after
-
-CTR delta
-
-Spend/Reveune slope
-
-Confidence scoring
-
-Produces:
-
-{
-  "id": "H1",
-  "confidence": 0.72,
-  "evidence": { ... }
-}
-
-🎨 (E) Creative Generator Agent
-
-📌 Responsible for:
-Generating new creative concepts for low-CTR segments.
-
-Based on:
-
-Past creative_message column
-
-Campaign themes
-
-Low-performing audience segments
-
-Output includes:
-
-Headlines
-
-Hooks
-
-CTAs
-
-Messaging improvements
-
-🔗 6. Full Workflow (Step-by-Step)
-
-Here’s how the system runs from start to finish:
-
-1️⃣ User Query
-
-Example:
-
-"Analyze ROAS drop in last 7 days"
-
-2️⃣ Planner Agent
-
-Converts query → JSON plan:
-
-{
-  "task": "analyze_roas_change",
-  "steps": [...],
-  "focus": {
-     "time_window": "last_7_days"
-  }
-}
-
-3️⃣ Data Agent
-
-Loads CSV, filters by the planner, and prepares summary:
-
-total spend
-
-country-level performance
-
-creative CTRs
-
-segment breakdown
-
-ROAS per adset
-
-4️⃣ Insight Agent
-
-Reads the summary → produces hypotheses:
-
-H1: CTR dropped -18% in US audience
-H2: Creative fatigue on carousel ads
-
-5️⃣ Evaluator Agent
-
-Validates each hypothesis:
-
-statistical differences
-
-CTR drop computation
-
-ROAS time-series
-
-confidence score
-
-6️⃣ Creative Generator Agent
-
-Uses the insights + low-performing creatives to generate:
-
-new hooks
-
-message angles
-
-CTAs
-
-ad copy variants
-
-7️⃣ Report Generator
-
-Combines all results into:
-
-insights.json
-
-creatives.json
-
-final report.md
-
-📜 7. Architecture Diagram (Mermaid)
-flowchart TD
-
-A[User Query] --> B[Planner Agent]
-B --> C[Data Agent]
-C --> D[Insight Agent]
-D --> E[Evaluator Agent]
-E --> F[Creative Generator Agent]
-F --> G[Report Builder]
-
-C -->|Summary Data| D
-D -->|Hypotheses| E
-E -->|Validated Insights| F
-F -->|Creative Ideas| G
-
-▶️ 8. Running the System
-Basic command:
+3️⃣ Run the system
 python src/run.py "Analyze ROAS drop in last 7 days"
 
-Output saved in:
+
+That’s it — the system will automatically create:
+
 reports/insights.json
+
 reports/creatives.json
+
 reports/report.md
 
-🧪 9. Testing
+📂 Project Structure
+.
+|-- README.md
+|-- config/
+|   └── config.yml
+|-- data/
+│   ├── Readme.md
+│   └── Synthetic_fb_ads.csv
+|-- prompts/
+│   ├── Planner.md
+│   ├── data_agent_prompt.md
+│   ├── insight_agent_prompt.md
+│   ├── evaluator_agent_prompt.md
+│   ├── creative_generator_prompt.md
+│   └── reflection_prompt.md
+|-- reports/
+│   ├── insights.json
+│   ├── creatives.json
+│   └── report.md
+|-- src/
+│   ├── agents/
+│   │   ├── planer_agent.py
+│   │   ├── data_agent.py
+│   │   ├── insight_agent.py
+│   │   ├── evaluator_agent.py
+│   │   └── creative_agent.py
+│   ├── orchestrator/
+│   │   └── agent_control.py
+│   ├── utils/
+│   │   ├── load_data.py
+│   │   ├── summary.py
+│   │   ├── validate.py
+│   │   ├── logger.py
+│   │   └── schemas.py
+│   └── run.py
+|-- tests/
+│   ├── test_plan.py
+│   ├── test_data.py
+│   └── test_evl.py
+|-- venv/
+
+📊 Data Instructions
+
+Place your dataset inside the data/ folder:
+
+data/Synthetic_fb_ads.csv
+
+
+The dataset must include columns like:
+
+spend, impressions, clicks, ctr, purchases, roas
+
+campaign_name, adset_name
+
+platform, country, audience_type
+
+creative_message, creative_type
+
+Update path in config:
+
+config/config.yml:
+
+data_path: "data/Synthetic_fb_ads.csv"
+use_sample_data: true
+random_seed: 42
+confidence_min: 0.6
+
+**Architecture Overview**
+
+Below is the agent workflow that my system uses:
+
+1. Planner Agent
+*(load data → analyze → evaluate → generate creatives)*
+
+2. Data Agent
+Loads the Facebook Ads CSV file
+Calculates high-level summaries such as:
+Spend totals
+CTR trends
+ROAS changes
+Purchase volume
+
+3. Insight Agent
+*Looks at the dataset summary Generates hypotheses explaining performance changes*
+
+4. Evaluator Agent
+
+*Validates each hypothesis using real metrics*
+Computes:
+ROAS difference
+CTR change
+Spend / Purchase variation
+Assigns a final confidence score for each hypothesis
+
+5. Creative Generator Agent
+
+Finds campaigns with low CTR
+Suggests better creative ideas using LLM + existing messaging
+
+Outputs:
+New headlines
+Hooks
+CTAs
+
+Visual suggestions
+
+6. Report Generator (Final Output)
+Combines everything into:
+*insights.json
+creatives.json
+report.md (final marketing report)*
+
+✔ Validation Logic (Evaluator Agent)
+
+To make insights believable, the evaluator agent uses:
+
+1. ROAS Change Validation
+Compares selected time window with previous
+Computes percentage change
+
+2. CTR + Frequency Checks
+If CTR ↓ but frequency ↑ → audience fatigue
+
+3. Confidence Score
+Each hypothesis gets a final score based on:
+ROAS change (40%)
+CTR change (30%)
+Purchase volume change (30%)
+Scores are deterministic using the config seed.
+
+## Example Outputs
+*insights.json*
+[
+  {
+    "id": "HYP-1",
+    "hypothesis": "ROAS dropped due to rising frequency causing audience fatigue.",
+    "confidence": 0.76,
+    "evidence": ["CTR dropped -18%", "Frequency increased from 2.1 to 4.3"]
+  }
+]
+
+ *creatives.json*
+[
+  {
+    "campaign": "Winter Sale",
+    "suggestions": [
+      "Add scarcity-driven headline",
+      "Use lifestyle imagery with product in use",
+      "Short vertical UGC-style video"
+    ]
+  }
+]
+
+📄 report.md 
+## Key Findings
+ROAS fell by -21% in the last 7 days. Two major factors contributed:
+- Audience fatigue from repeated creatives
+- Weak headline engagement in high-frequency ad sets
+
+## Creative Recommendations
+- Use more benefit-led messaging
+- Try FOMO hooks like "Ends Tonight"
+- Use variant with human model in frame
+
+**Testing**
 
 Run all tests:
-
 pytest -q
 
+Tests cover:
+Planner fallback logic
+Dataset loading
+Evaluator scoring
 
-Includes:
+**Makefile**
+make install
+make run
+make test
 
-planner logic
 
-data load + summary
-
-hypothesis evaluation
+**Tech Stack**
+Python 3.12
+LangChain (agents, prompts)
+Ollama (local LLM inference)
+Pandas / NumPy
+Loguru for logs
+PyTest for automated tests
