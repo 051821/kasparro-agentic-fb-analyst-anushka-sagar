@@ -105,10 +105,10 @@ confidence_min: 0.6
 
 Below is the agent workflow that my system uses:
 
-1. Planner Agent
+1. *Planner Agent*
 *(load data → analyze → evaluate → generate creatives)*
 
-2. Data Agent
+2. *Data Agent*
 Loads the Facebook Ads CSV file
 Calculates high-level summaries such as:
 Spend totals
@@ -116,10 +116,10 @@ CTR trends
 ROAS changes
 Purchase volume
 
-3. Insight Agent
+3. *Insight Agent*
 *Looks at the dataset summary Generates hypotheses explaining performance changes*
 
-4. Evaluator Agent
+4. *Evaluator Agent*
 
 *Validates each hypothesis using real metrics*
 Computes:
@@ -128,7 +128,7 @@ CTR change
 Spend / Purchase variation
 Assigns a final confidence score for each hypothesis
 
-5. Creative Generator Agent
+5. *Creative Generator Agent*
 
 Finds campaigns with low CTR
 Suggests better creative ideas using LLM + existing messaging
@@ -140,13 +140,13 @@ CTAs
 
 Visual suggestions
 
-6. Report Generator (Final Output)
+6.*Report Generator (Final Output)*
 Combines everything into:
 *insights.json
 creatives.json
 report.md (final marketing report)*
 
-✔ Validation Logic (Evaluator Agent)
+**✔ Validation Logic (Evaluator Agent)**
 
 To make insights believable, the evaluator agent uses:
 
