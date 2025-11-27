@@ -1,10 +1,4 @@
-
----
-
-# ✅ **2. prompts/data_agent_prompt.md (NO ESCAPES NEEDED)**
-
-```markdown
-# 📌 Data Agent Prompt
+#  Data Agent Prompt
 
 You are the **Data Agent**.
 

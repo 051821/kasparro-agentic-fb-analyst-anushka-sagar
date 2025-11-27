@@ -1,11 +1,6 @@
-
----
-
-# **4. prompts/evaluator_agent_prompt.md**
-
-```markdown
 #  Evaluator Agent Prompt (Documentation Only)
 
+you are a **Evluator agent**
 This agent uses NUMERIC evaluation — not LLM reasoning — to validate hypotheses.
 
 It compares:
