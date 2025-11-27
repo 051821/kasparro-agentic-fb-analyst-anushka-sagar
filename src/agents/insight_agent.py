@@ -29,11 +29,10 @@ class InsightAgent:
         try:
             result = chain.invoke({"query": query, "summary": summary})
             if isinstance(result, list):
-                return result  # type: ignore[return-value]
+                return result  
         except Exception as e:
             logger.error(f"InsightAgent LLM failed, using fallback hypotheses. Error: {e}")
 
-        # fallback static hypotheses
         fallback: List[Hypothesis] = [
             {
                 "id": "H1",

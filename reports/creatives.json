@@ -2,51 +2,51 @@
   {
     "campaign_name": "Summer Sale",
     "issue": "Low CTR vs threshold",
-    "current_message": "UP TO 50% OFF ALL SUMMER ITEMS!",
+    "current_message": "Get ready for summer with our exclusive sale!",
     "recommendation": {
-      "headline": "LAST CHANCE: Summer Sale Ends Soon!",
-      "primary_text": "Don't miss out on our biggest sale of the season! Shop now and save up to 50% off all summer items.",
-      "cta": "SHOP NOW"
+      "headline": "UNBELIEVABLE SUMMER DEALS INSIDE!",
+      "primary_text": "Don't miss out on the hottest summer sales of the year! Shop now and get up to 50% off your favorite items.",
+      "cta": "Shop Now"
     }
   },
   {
-    "campaign_name": "New Product Launch",
+    "campaign_name": "New Collection",
     "issue": "Low CTR vs threshold",
-    "current_message": "INTRODUCING OUR NEW SMARTWATCH!",
+    "current_message": "Check out our new collection!",
     "recommendation": {
-      "headline": "Get Fit with Our New Smartwatch!",
-      "primary_text": "Stay on top of your fitness goals with our latest smartwatch. Track your progress, receive notifications, and more!",
-      "cta": "LEARN MORE"
+      "headline": "INTRODUCING OUR LATEST FASHION MUST-HAVES!",
+      "primary_text": "Stay ahead of the trend with our newest arrivals! From statement pieces to wardrobe staples, shop now and get free shipping on orders over $50.",
+      "cta": "Shop Now"
     }
   },
   {
     "campaign_name": "Abandoned Cart",
     "issue": "Low CTR vs threshold",
-    "current_message": "DON'T LEAVE YOUR SHOPPING CART BEHIND!",
+    "current_message": "Don't leave your cart behind!",
     "recommendation": {
-      "headline": "Complete Your Order Now!",
-      "primary_text": "You've got items in your cart, but haven't checked out yet. Complete your order now and get free shipping on your entire purchase!",
-      "cta": "COMPLETE ORDER"
+      "headline": "RECOVER YOUR CART AND SAVE BIG!",
+      "primary_text": "We've got you covered! Recover your abandoned cart and get 20% off your entire order. Don't miss out on this amazing deal!",
+      "cta": "Recover Cart"
     }
   },
   {
-    "campaign_name": "Email Nurture",
+    "campaign_name": "Loyalty Program",
     "issue": "Low CTR vs threshold",
-    "current_message": "EXCLUSIVE OFFER FOR OUR LOYAL CUSTOMERS!",
+    "current_message": "Join our loyalty program and earn rewards!",
     "recommendation": {
-      "headline": "You're One of Our Favorites!",
-      "primary_text": "As a valued customer, we want to reward you with an exclusive offer. Enjoy 20% off your next purchase and free shipping on orders over $50.",
-      "cta": "SHOP NOW"
+      "headline": "JOIN THE CLUB AND GET REWARDED!",
+      "primary_text": "As a valued member, enjoy exclusive discounts, early access to sales, and free shipping on orders over $75. Sign up now and start earning rewards!",
+      "cta": "Join Now"
     }
   },
   {
-    "campaign_name": "Welcome Series",
+    "campaign_name": "Limited Time Offer",
     "issue": "Low CTR vs threshold",
-    "current_message": "WELCOME TO OUR COMMUNITY!",
+    "current_message": "Don't miss out on this limited time offer!",
     "recommendation": {
-      "headline": "Get Started with Our Exclusive Offers!",
-      "primary_text": "As a new member of our community, we want to welcome you with open arms. Enjoy 15% off your first purchase and free shipping on orders over $30.",
-      "cta": "SHOP NOW"
+      "headline": "LAST CHANCE TO SAVE BIG!",
+      "primary_text": "This is your final chance to snag our best-selling items at unbeatable prices! Don't let it slip away \u2013 shop now and get free shipping on orders over $100.",
+      "cta": "Shop Now"
     }
   }
 ]

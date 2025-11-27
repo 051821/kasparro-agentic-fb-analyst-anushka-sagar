@@ -9,36 +9,36 @@
 
 - **Summer Sale**
   - Issue: Low CTR vs threshold
-  - Current: UP TO 50% OFF ALL SUMMER ITEMS!
-  - Headline: LAST CHANCE: Summer Sale Ends Soon!
-  - Primary: Don't miss out on our biggest sale of the season! Shop now and save up to 50% off all summer items.
-  - CTA: SHOP NOW
+  - Current: Get ready for summer with our exclusive sale!
+  - Headline: UNBELIEVABLE SUMMER DEALS INSIDE!
+  - Primary: Don't miss out on the hottest summer sales of the year! Shop now and get up to 50% off your favorite items.
+  - CTA: Shop Now
 
-- **New Product Launch**
+- **New Collection**
   - Issue: Low CTR vs threshold
-  - Current: INTRODUCING OUR NEW SMARTWATCH!
-  - Headline: Get Fit with Our New Smartwatch!
-  - Primary: Stay on top of your fitness goals with our latest smartwatch. Track your progress, receive notifications, and more!
-  - CTA: LEARN MORE
+  - Current: Check out our new collection!
+  - Headline: INTRODUCING OUR LATEST FASHION MUST-HAVES!
+  - Primary: Stay ahead of the trend with our newest arrivals! From statement pieces to wardrobe staples, shop now and get free shipping on orders over $50.
+  - CTA: Shop Now
 
 - **Abandoned Cart**
   - Issue: Low CTR vs threshold
-  - Current: DON'T LEAVE YOUR SHOPPING CART BEHIND!
-  - Headline: Complete Your Order Now!
-  - Primary: You've got items in your cart, but haven't checked out yet. Complete your order now and get free shipping on your entire purchase!
-  - CTA: COMPLETE ORDER
+  - Current: Don't leave your cart behind!
+  - Headline: RECOVER YOUR CART AND SAVE BIG!
+  - Primary: We've got you covered! Recover your abandoned cart and get 20% off your entire order. Don't miss out on this amazing deal!
+  - CTA: Recover Cart
 
-- **Email Nurture**
+- **Loyalty Program**
   - Issue: Low CTR vs threshold
-  - Current: EXCLUSIVE OFFER FOR OUR LOYAL CUSTOMERS!
-  - Headline: You're One of Our Favorites!
-  - Primary: As a valued customer, we want to reward you with an exclusive offer. Enjoy 20% off your next purchase and free shipping on orders over $50.
-  - CTA: SHOP NOW
+  - Current: Join our loyalty program and earn rewards!
+  - Headline: JOIN THE CLUB AND GET REWARDED!
+  - Primary: As a valued member, enjoy exclusive discounts, early access to sales, and free shipping on orders over $75. Sign up now and start earning rewards!
+  - CTA: Join Now
 
-- **Welcome Series**
+- **Limited Time Offer**
   - Issue: Low CTR vs threshold
-  - Current: WELCOME TO OUR COMMUNITY!
-  - Headline: Get Started with Our Exclusive Offers!
-  - Primary: As a new member of our community, we want to welcome you with open arms. Enjoy 15% off your first purchase and free shipping on orders over $30.
-  - CTA: SHOP NOW
+  - Current: Don't miss out on this limited time offer!
+  - Headline: LAST CHANCE TO SAVE BIG!
+  - Primary: This is your final chance to snag our best-selling items at unbeatable prices! Don't let it slip away – shop now and get free shipping on orders over $100.
+  - CTA: Shop Now
 

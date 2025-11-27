@@ -2,14 +2,13 @@ import sys
 import os
 import yaml
 
-# ensure src/ is on path for `python src/run.py ...`
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 PARENT_DIR = os.path.dirname(CURRENT_DIR)
 if CURRENT_DIR not in sys.path:
     sys.path.append(CURRENT_DIR)
 
-from utils.logger import configure_logging, logger  # type: ignore  # noqa
-from orchestrator.agent_control import AgentController  # type: ignore  # noqa
+from utils.logger import configure_logging, logger  
+from orchestrator.agent_control import AgentController  
 
 
 def main() -> None:
@@ -29,7 +28,7 @@ def main() -> None:
     controller.run(query)
 
     logger.info("Run completed successfully.")
-    print("✅ Analysis complete. See reports/insights.json, reports/creatives.json and reports/report.md")
+    print(" Analysis complete. See reports/insights.json, reports/creatives.json and reports/report.md")
 
 
 if __name__ == "__main__":

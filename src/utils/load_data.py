@@ -22,11 +22,9 @@ def load_dataset(path: str) -> pd.DataFrame:
     if missing:
         raise ValueError(f"Missing required columns in dataset: {missing}")
 
-    # Parse date if it's not already datetime
     if not pd.api.types.is_datetime64_any_dtype(df["date"]):
         df["date"] = pd.to_datetime(df["date"], errors="coerce")
 
-    # Compute CTR and ROAS if not present
     if "ctr" not in df.columns:
         df["ctr"] = df["clicks"] / df["impressions"].replace(0, 1)
 

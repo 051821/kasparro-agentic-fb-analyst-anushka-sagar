@@ -10,10 +10,10 @@ run:
 	$(PYTHON) src/run.py "$(QUERY)"
 
 test:
-	pytest -q
+	$(PYTHON) -m pytest -q
 
 lint:
-	$(PYTHON) -m compileall src
+	$(PYTHON) -m py_compile $$(git ls-files '*.py')
 
 report:
 	$(PYTHON) src/run.py "Analyze ROAS drop in last 7 days"
