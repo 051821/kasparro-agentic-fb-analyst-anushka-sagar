@@ -1,0 +1,20 @@
+random_seed: 42
+use_sample_data: true
+
+data:
+  path: "data/Synthetic_fb_ads.csv"
+
+thresholds:
+  roas_drop_pct: 0.25
+  ctr_drop_pct: 0.20
+  min_impressions: 1000
+
+llm:
+  provider: "ollama"
+  model: "llama3.1"
+  temperature: 0.2
+  max_tokens: 2048
+
+paths:
+  report_dir: "reports"
+  log_dir: "logs"

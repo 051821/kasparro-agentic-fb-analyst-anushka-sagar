@@ -1,0 +1,32 @@
+[
+  {
+    "id": "H1",
+    "driver": "Audience fatigue",
+    "description": "ROAS dropped while impressions increased and CTR decreased, suggesting audience fatigue.",
+    "segment": "High-spend evergreen campaigns",
+    "confidence": 1.0,
+    "evidence": {
+      "roas_before": 5.955871233654144,
+      "roas_after": 5.695933375827551,
+      "roas_change_pct": -0.04364396872077964,
+      "ctr_before": 0.012948897663462995,
+      "ctr_after": 0.012380958932209874,
+      "ctr_change_pct": -0.043860006157561526
+    }
+  },
+  {
+    "id": "H2",
+    "driver": "Creative fatigue",
+    "description": "ROAS dropped in campaigns reusing the same creative messages for a long time.",
+    "segment": "Top-spend campaigns with repeated creative_message",
+    "confidence": 1.0,
+    "evidence": {
+      "roas_before": 5.955871233654144,
+      "roas_after": 5.695933375827551,
+      "roas_change_pct": -0.04364396872077964,
+      "ctr_before": 0.012948897663462995,
+      "ctr_after": 0.012380958932209874,
+      "ctr_change_pct": -0.043860006157561526
+    }
+  }
+]

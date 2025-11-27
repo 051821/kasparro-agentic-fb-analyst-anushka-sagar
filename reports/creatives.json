@@ -1,0 +1,52 @@
+[
+  {
+    "campaign_name": "Summer Sale",
+    "issue": "Low CTR vs threshold",
+    "current_message": "UP TO 50% OFF ALL SUMMER ITEMS!",
+    "recommendation": {
+      "headline": "LAST CHANCE: Summer Sale Ends Soon!",
+      "primary_text": "Don't miss out on our biggest sale of the season! Shop now and save up to 50% off all summer items.",
+      "cta": "SHOP NOW"
+    }
+  },
+  {
+    "campaign_name": "New Product Launch",
+    "issue": "Low CTR vs threshold",
+    "current_message": "INTRODUCING OUR NEW SMARTWATCH!",
+    "recommendation": {
+      "headline": "Get Fit with Our New Smartwatch!",
+      "primary_text": "Stay on top of your fitness goals with our latest smartwatch. Track your progress, receive notifications, and more!",
+      "cta": "LEARN MORE"
+    }
+  },
+  {
+    "campaign_name": "Abandoned Cart",
+    "issue": "Low CTR vs threshold",
+    "current_message": "DON'T LEAVE YOUR SHOPPING CART BEHIND!",
+    "recommendation": {
+      "headline": "Complete Your Order Now!",
+      "primary_text": "You've got items in your cart, but haven't checked out yet. Complete your order now and get free shipping on your entire purchase!",
+      "cta": "COMPLETE ORDER"
+    }
+  },
+  {
+    "campaign_name": "Email Nurture",
+    "issue": "Low CTR vs threshold",
+    "current_message": "EXCLUSIVE OFFER FOR OUR LOYAL CUSTOMERS!",
+    "recommendation": {
+      "headline": "You're One of Our Favorites!",
+      "primary_text": "As a valued customer, we want to reward you with an exclusive offer. Enjoy 20% off your next purchase and free shipping on orders over $50.",
+      "cta": "SHOP NOW"
+    }
+  },
+  {
+    "campaign_name": "Welcome Series",
+    "issue": "Low CTR vs threshold",
+    "current_message": "WELCOME TO OUR COMMUNITY!",
+    "recommendation": {
+      "headline": "Get Started with Our Exclusive Offers!",
+      "primary_text": "As a new member of our community, we want to welcome you with open arms. Enjoy 15% off your first purchase and free shipping on orders over $30.",
+      "cta": "SHOP NOW"
+    }
+  }
+]
