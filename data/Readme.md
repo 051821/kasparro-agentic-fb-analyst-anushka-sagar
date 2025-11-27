@@ -8,16 +8,17 @@ File Included
 
 # A synthetic dataset with the following columns:
 
-*Column Name*                        * Description*
-date	                        Daily timestamp for each ad performance entry
-campaign_name	                Name of the FB ad campaign
-adset_name	                    Name of the ad set
-country	                        Target audience country
-spend	                        Total money spent on ads that day
-impressions                  	Number of times the ad was shown
-clicks	                        Number of ad clicks
-purchases	                    Number of purchases attributed to the ad
-revenue	                        Revenue generated from those purchases
+| **Column Name**   | **Description** |
+|-------------------|-----------------|
+| `date`            | Daily timestamp for each ad performance entry |
+| `campaign_name`   | Name of the Facebook ad campaign |
+| `adset_name`      | Name of the ad set |
+| `country`         | Target audience country |
+| `spend`           | Total money spent on ads that day |
+| `impressions`     | Number of times the ad was shown |
+| `clicks`          | Number of ad clicks |
+| `purchases`       | Number of purchases attributed to the ad |
+| `revenue`         | Revenue generated from those purchases |
 
 **Parameters**
 ctr	Click-Through Rate = clicks / impressions
