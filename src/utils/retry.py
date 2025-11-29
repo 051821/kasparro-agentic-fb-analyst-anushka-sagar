@@ -13,5 +13,5 @@ def retry(operation : Callable, attempts : int = 3, delay : float = 1.0 , agent 
             last_exp = e
             log.warning(f"Attempt {a} failed: {e}. Retrying in {delay}s...")
             time.sleep(delay)
-    log.error(f"All {attempts} attempts failed. Last error: {last_exception}")
+    log.error(f"All {attempts} attempts failed. Last error: {last_exp}")
     raise last_exp           
