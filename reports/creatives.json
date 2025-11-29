@@ -4,9 +4,9 @@
     "issue": "Low CTR vs threshold",
     "current_message": "Get ready for summer with our exclusive deals!",
     "recommendation": {
-      "headline": "Beat the Heat, Beat the Price!",
-      "primary_text": "Don't miss out on our sizzling summer sale! Up to 50% off select items.",
-      "cta": "Shop Now"
+      "headline": "Beat the Heat: Up to 50% Off Summer Essentials!",
+      "primary_text": "Stay cool and save big on our top picks for summer fun. From sunglasses to beach towels, we've got you covered.",
+      "cta": "Shop Now & Stay Cool!"
     }
   },
   {
@@ -14,39 +14,39 @@
     "issue": "Low CTR vs threshold",
     "current_message": "Discover the latest trends with our new arrivals!",
     "recommendation": {
-      "headline": "Fresh Faces, Fresh Prices!",
-      "primary_text": "Explore our newest collection and get 20% off your first purchase.",
-      "cta": "Shop Now"
-    }
-  },
-  {
-    "campaign_name": "Last Chance",
-    "issue": "Low CTR vs threshold",
-    "current_message": "Don't miss out on these limited-time deals!",
-    "recommendation": {
-      "headline": "Time's Running Out!",
-      "primary_text": "Hurry! Our last-chance sale ends soon. Up to 75% off select items.",
-      "cta": "Shop Now"
+      "headline": "Fresh Faces: Explore Our New Arrivals Today!",
+      "primary_text": "Stay ahead of the curve with our newest drops. From statement pieces to everyday essentials, we've got you covered.",
+      "cta": "Shop Now & Get Ahead!"
     }
   },
   {
     "campaign_name": "Gift Guide",
     "issue": "Low CTR vs threshold",
-    "current_message": "Find the perfect gift for any occasion!",
+    "current_message": "Find the perfect gift for your loved ones!",
     "recommendation": {
-      "headline": "Give the Gift of Savings!",
-      "primary_text": "Get exclusive discounts on our top picks. Plus, free shipping on orders over $50.",
-      "cta": "Shop Now"
+      "headline": "Gift Goals: Find the Perfect Present Today!",
+      "primary_text": "From unique experiences to thoughtful keepsakes, we've curated a list of our top picks. Start shopping now and make this holiday season one to remember.",
+      "cta": "Shop Now & Make It Happen!"
     }
   },
   {
-    "campaign_name": "Flash Sale",
+    "campaign_name": "Clearance Sale",
     "issue": "Low CTR vs threshold",
-    "current_message": "Don't blink or you'll miss out!",
+    "current_message": "Don't miss out on our clearance sale!",
     "recommendation": {
-      "headline": "Flash, Bang, Done!",
-      "primary_text": "Limited-time offer: Up to 90% off select items. Hurry, sale ends soon!",
-      "cta": "Shop Now"
+      "headline": "Last Chance: Clearance Sale Ends Soon!",
+      "primary_text": "Stock up and save big on our remaining inventory. From cozy sweaters to stylish accessories, we've got you covered.",
+      "cta": "Shop Now & Stock Up!"
+    }
+  },
+  {
+    "campaign_name": "Loyalty Program",
+    "issue": "Low CTR vs threshold",
+    "current_message": "Join our loyalty program and start earning rewards!",
+    "recommendation": {
+      "headline": "Rewards Ahead: Join Our Loyalty Program Today!",
+      "primary_text": "As a valued member, you'll enjoy exclusive perks, early access to new arrivals, and more. Start shopping now and start earning your rewards.",
+      "cta": "Join Now & Start Earning!"
     }
   }
 ]

@@ -6,7 +6,7 @@ from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import JsonOutputParser
 
 from utils.llm_client import get_llm
-
+from utils.retry import retry
 
 class PlannerAgent:
 
@@ -57,7 +57,12 @@ class PlannerAgent:
             chain = self.prompt | self.llm | self.parser
 
             try:
-                result = chain.invoke({"query": query})
+                result = retry(
+                    lambda: chain.invoke({"query" : query}),
+                    attempts=self.config.get("retry", {}).get("attempts", 3),
+                    delay=self.config.get("retry", {}).get("delay", 1.0),
+                    agent="plan"
+                )
                 self.log.trace(f"Raw LLM output received: {result}")
 
                 if isinstance(result, dict):

@@ -5,6 +5,7 @@ from langchain_core.output_parsers import JsonOutputParser
 from loguru import logger
 
 from utils.llm_client import get_llm
+from utils.retry import retry
 from utils.schemas import Hypothesis
 
 
@@ -56,7 +57,12 @@ class InsightAgent:
 
         try:
             self.log.trace("Sending insight generation request to LLM...")
-            result = chain.invoke({"query": query, "summary": summary})
+            result = retry(
+                lambda: chain.invoke({"query": query, "summary": summary}),
+                attempts=self.config.get("retry", {}).get("attempts", 3),
+                delay=self.config.get("retry", {}).get("delay", 1.0),
+                agent="insight"
+                  )
             self.log.trace(f"Raw LLM output received: {result}")
 
             if isinstance(result, list):

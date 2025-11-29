@@ -6,6 +6,7 @@ from langchain_core.output_parsers import JsonOutputParser
 from loguru import logger
 
 from utils.llm_client import get_llm
+from utils.retry import retry
 from utils.schemas import CreativeIdea, CreativeRecommendation
 
 
@@ -107,7 +108,12 @@ class CreativeAgent:
 
         chain = self.prompt | self.llm | self.parser
         try:
-            result = chain.invoke({"low_ctr": payload})
+            result = retry(
+                lambda: chain.invoke({"low_ctr": payload}),
+                attempts=self.config.get("retry", {}).get("attempts", 3),
+                delay=self.config.get("retry", {}).get("delay", 1.0),
+                agent="creative"
+                )
             self.log.info("CreativeAgent LLM produced valid creative ideas.")
             if isinstance(result, list):
                 return result

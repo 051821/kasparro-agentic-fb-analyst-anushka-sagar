@@ -9,7 +9,6 @@ from utils.validate import filter_significant_segments, global_before_after_spli
 class EvalAgent:
 
     def __init__(self):
-        # Structured evaluator logger
         self.log = logger.bind(agent="evaluate")
         self.log.trace("EvalAgent initialized.")
 

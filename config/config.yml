@@ -11,6 +11,11 @@ thresholds:
   ctr_drop_pct: 0.20
   min_impressions: 1000
 
+retry:
+  attempts: 4
+  delay: 5.0
+
+
 llm:
   provider: "ollama"
   model: "llama3"
