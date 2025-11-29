@@ -17,7 +17,7 @@ class AgentController:
     def __init__(self, config: Dict[str, Any]):
         self.config = config
         self.planner = PlannerAgent(config)
-        self.data_agent = DataAgent()
+        self.data_agent = DataAgent(config)
         self.insight_agent = InsightAgent(config)
         self.eval_agent = EvalAgent()
         self.creative_agent = CreativeAgent(config)

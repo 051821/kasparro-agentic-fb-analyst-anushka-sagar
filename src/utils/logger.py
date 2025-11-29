@@ -11,9 +11,9 @@ def configure_logging(log_dir: str) -> None:
     insight_log = os.path.join(log_dir, "insight.log")
     plan_log = os.path.join(log_dir, "plan.log")
     evaluate_log = os.path.join(log_dir, "evaluate.log")
-    data_log = os.path.join(log_dir, "data.log")            # NEW
-    creative_log = os.path.join(log_dir, "creative.log")    # NEW
-
+    data_log = os.path.join(log_dir, "data.log")            
+    creative_log = os.path.join(log_dir, "creative.log")    
+    schema_log = os.path.join(log_dir, "schema.log")
     logger.add(
         run_log,
         rotation="1 MB",
@@ -56,6 +56,14 @@ def configure_logging(log_dir: str) -> None:
         diagnose=True,
         filter=lambda r: r["extra"].get("agent") == "creative"
     )
+    logger.add(
+        schema_log,
+        rotation="1 MB",
+        backtrace=True,
+        diagnose=True,
+        filter=lambda r: r["extra"].get("agent") == "schema"
+    )
+
 
     logger.bind(agent="run").info("Logger initialized")
 

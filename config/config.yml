@@ -25,3 +25,20 @@ llm:
 paths:
   report_dir: "reports"
   log_dir: "logs"
+
+schema:
+  version: 1
+  expected_columns:
+    - date
+    - spend
+    - impressions
+    - clicks
+    - ctr
+    - revenue
+    - roas
+    - campaign_name
+    - creative_message
+    - audience_type
+    - platform
+    - country
+
