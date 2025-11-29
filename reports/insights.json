@@ -1,9 +1,9 @@
 [
   {
     "id": "H1",
-    "driver": "Audience fatigue",
-    "description": "ROAS dropped while impressions increased and CTR decreased, suggesting audience fatigue.",
-    "segment": "High-spend evergreen campaigns",
+    "driver": "Ad Creative Refresh",
+    "description": "New ad creative introduced, potentially improving engagement and driving higher ROAS.",
+    "segment": "All Campaigns",
     "confidence": 1.0,
     "evidence": {
       "roas_before": 5.955871233654144,
@@ -16,9 +16,99 @@
   },
   {
     "id": "H2",
-    "driver": "Creative fatigue",
-    "description": "ROAS dropped in campaigns reusing the same creative messages for a long time.",
-    "segment": "Top-spend campaigns with repeated creative_message",
+    "driver": "Budget Allocation Shift",
+    "description": "Increased budget allocation to top-performing ad sets, potentially driving higher ROAS.",
+    "segment": "Top-Performing Ad Sets",
+    "confidence": 1.0,
+    "evidence": {
+      "roas_before": 5.955871233654144,
+      "roas_after": 5.695933375827551,
+      "roas_change_pct": -0.04364396872077964,
+      "ctr_before": 0.012948897663462995,
+      "ctr_after": 0.012380958932209874,
+      "ctr_change_pct": -0.043860006157561526
+    }
+  },
+  {
+    "id": "H3",
+    "driver": "Target Audience Expansion",
+    "description": "Expanded target audience to include new demographics, potentially driving higher ROAS.",
+    "segment": "New Target Audience",
+    "confidence": 1.0,
+    "evidence": {
+      "roas_before": 5.955871233654144,
+      "roas_after": 5.695933375827551,
+      "roas_change_pct": -0.04364396872077964,
+      "ctr_before": 0.012948897663462995,
+      "ctr_after": 0.012380958932209874,
+      "ctr_change_pct": -0.043860006157561526
+    }
+  },
+  {
+    "id": "H4",
+    "driver": "Ad Placement Optimization",
+    "description": "Optimized ad placements to prioritize higher-performing placements, potentially driving higher ROAS.",
+    "segment": "Prioritized Ad Placements",
+    "confidence": 1.0,
+    "evidence": {
+      "roas_before": 5.955871233654144,
+      "roas_after": 5.695933375827551,
+      "roas_change_pct": -0.04364396872077964,
+      "ctr_before": 0.012948897663462995,
+      "ctr_after": 0.012380958932209874,
+      "ctr_change_pct": -0.043860006157561526
+    }
+  },
+  {
+    "id": "H5",
+    "driver": "Bid Strategy Update",
+    "description": "Updated bid strategy to prioritize higher-value conversions, potentially driving higher ROAS.",
+    "segment": "All Campaigns",
+    "confidence": 1.0,
+    "evidence": {
+      "roas_before": 5.955871233654144,
+      "roas_after": 5.695933375827551,
+      "roas_change_pct": -0.04364396872077964,
+      "ctr_before": 0.012948897663462995,
+      "ctr_after": 0.012380958932209874,
+      "ctr_change_pct": -0.043860006157561526
+    }
+  },
+  {
+    "id": "H6",
+    "driver": "Ad Copy Refresh",
+    "description": "Refreshed ad copy to improve relevance and engagement, potentially driving higher ROAS.",
+    "segment": "All Campaigns",
+    "confidence": 1.0,
+    "evidence": {
+      "roas_before": 5.955871233654144,
+      "roas_after": 5.695933375827551,
+      "roas_change_pct": -0.04364396872077964,
+      "ctr_before": 0.012948897663462995,
+      "ctr_after": 0.012380958932209874,
+      "ctr_change_pct": -0.043860006157561526
+    }
+  },
+  {
+    "id": "H7",
+    "driver": "Targeting Optimization",
+    "description": "Optimized targeting to prioritize higher-performing audiences, potentially driving higher ROAS.",
+    "segment": "Prioritized Target Audiences",
+    "confidence": 1.0,
+    "evidence": {
+      "roas_before": 5.955871233654144,
+      "roas_after": 5.695933375827551,
+      "roas_change_pct": -0.04364396872077964,
+      "ctr_before": 0.012948897663462995,
+      "ctr_after": 0.012380958932209874,
+      "ctr_change_pct": -0.043860006157561526
+    }
+  },
+  {
+    "id": "H8",
+    "driver": "Ad Rotation Update",
+    "description": "Updated ad rotation to prioritize higher-performing ads, potentially driving higher ROAS.",
+    "segment": "All Campaigns",
     "confidence": 1.0,
     "evidence": {
       "roas_before": 5.955871233654144,

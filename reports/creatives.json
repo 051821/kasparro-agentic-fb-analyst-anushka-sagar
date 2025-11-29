@@ -2,50 +2,50 @@
   {
     "campaign_name": "Summer Sale",
     "issue": "Low CTR vs threshold",
-    "current_message": "Get ready for summer with our exclusive sale!",
+    "current_message": "Get ready for summer with our exclusive deals!",
     "recommendation": {
-      "headline": "UNBELIEVABLE SUMMER DEALS INSIDE!",
-      "primary_text": "Don't miss out on the hottest summer sales of the year! Shop now and get up to 50% off your favorite items.",
+      "headline": "Beat the Heat, Beat the Price!",
+      "primary_text": "Don't miss out on our sizzling summer sale! Up to 50% off select items.",
       "cta": "Shop Now"
     }
   },
   {
-    "campaign_name": "New Collection",
+    "campaign_name": "New Arrivals",
     "issue": "Low CTR vs threshold",
-    "current_message": "Check out our new collection!",
+    "current_message": "Discover the latest trends with our new arrivals!",
     "recommendation": {
-      "headline": "INTRODUCING OUR LATEST FASHION MUST-HAVES!",
-      "primary_text": "Stay ahead of the trend with our newest arrivals! From statement pieces to wardrobe staples, shop now and get free shipping on orders over $50.",
+      "headline": "Fresh Faces, Fresh Prices!",
+      "primary_text": "Explore our newest collection and get 20% off your first purchase.",
       "cta": "Shop Now"
     }
   },
   {
-    "campaign_name": "Abandoned Cart",
+    "campaign_name": "Last Chance",
     "issue": "Low CTR vs threshold",
-    "current_message": "Don't leave your cart behind!",
+    "current_message": "Don't miss out on these limited-time deals!",
     "recommendation": {
-      "headline": "RECOVER YOUR CART AND SAVE BIG!",
-      "primary_text": "We've got you covered! Recover your abandoned cart and get 20% off your entire order. Don't miss out on this amazing deal!",
-      "cta": "Recover Cart"
+      "headline": "Time's Running Out!",
+      "primary_text": "Hurry! Our last-chance sale ends soon. Up to 75% off select items.",
+      "cta": "Shop Now"
     }
   },
   {
-    "campaign_name": "Loyalty Program",
+    "campaign_name": "Gift Guide",
     "issue": "Low CTR vs threshold",
-    "current_message": "Join our loyalty program and earn rewards!",
+    "current_message": "Find the perfect gift for any occasion!",
     "recommendation": {
-      "headline": "JOIN THE CLUB AND GET REWARDED!",
-      "primary_text": "As a valued member, enjoy exclusive discounts, early access to sales, and free shipping on orders over $75. Sign up now and start earning rewards!",
-      "cta": "Join Now"
+      "headline": "Give the Gift of Savings!",
+      "primary_text": "Get exclusive discounts on our top picks. Plus, free shipping on orders over $50.",
+      "cta": "Shop Now"
     }
   },
   {
-    "campaign_name": "Limited Time Offer",
+    "campaign_name": "Flash Sale",
     "issue": "Low CTR vs threshold",
-    "current_message": "Don't miss out on this limited time offer!",
+    "current_message": "Don't blink or you'll miss out!",
     "recommendation": {
-      "headline": "LAST CHANCE TO SAVE BIG!",
-      "primary_text": "This is your final chance to snag our best-selling items at unbeatable prices! Don't let it slip away \u2013 shop now and get free shipping on orders over $100.",
+      "headline": "Flash, Bang, Done!",
+      "primary_text": "Limited-time offer: Up to 90% off select items. Hurry, sale ends soon!",
       "cta": "Shop Now"
     }
   }

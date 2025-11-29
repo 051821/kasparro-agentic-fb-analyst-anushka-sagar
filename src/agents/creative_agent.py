@@ -11,20 +11,27 @@ from utils.schemas import CreativeIdea, CreativeRecommendation
 
 class CreativeAgent:
     def __init__(self, config: Dict[str, Any]):
+        self.log = logger.bind(agent="creative")  # ← IMPORTANT
         self.config = config
+
         self.llm = get_llm(
             model=config["llm"]["model"],
             temperature=config["llm"]["temperature"],
         )
+        self.log.info("CreativeAgent LLM initialized successfully.")
+
         with open("prompts/creative_generator_prompt.md", "r", encoding="utf-8") as f:
             template = f.read()
+
         self.prompt = PromptTemplate(
             template=template,
             input_variables=["low_ctr"],
         )
         self.parser = JsonOutputParser()
 
+
     def _find_low_ctr_campaigns(self, df: pd.DataFrame, ctr_threshold: float = 0.01) -> pd.DataFrame:
+        self.log.debug(f"Finding low CTR campaigns with threshold {ctr_threshold}")
         grouped = (
             df.groupby("campaign_name")
             .agg(
@@ -36,10 +43,15 @@ class CreativeAgent:
             .reset_index()
         )
         grouped["ctr"] = grouped["clicks"] / grouped["impressions"].replace(0, 1)
-        return grouped[grouped["ctr"] < ctr_threshold]
+        low_df = grouped[grouped["ctr"] < ctr_threshold]
+        self.log.info(f"Found {len(low_df)} low CTR campaigns.")
+        return low_df
+
 
     def _fallback_creatives(self, df: pd.DataFrame, low_df: pd.DataFrame) -> List[CreativeIdea]:
+        self.log.warning("Using fallback creative generation.")
         ideas: List[CreativeIdea] = []
+
         for _, row in low_df.head(5).iterrows():
             campaign_name = row["campaign_name"]
             cdf = df[df["campaign_name"] == campaign_name]
@@ -50,7 +62,7 @@ class CreativeAgent:
             )
             rec: CreativeRecommendation = {
                 "headline": f"Refresh your {campaign_name} ads",
-                "primary_text": "Test a new angle that focuses on clear value, comfort, and urgency, with strong first-line hooks.",
+                "primary_text": "Test a new angle focusing on clarity, urgency and benefit.",
                 "cta": "Shop Now",
             }
             ideas.append(
@@ -61,11 +73,17 @@ class CreativeAgent:
                     "recommendation": rec,
                 }
             )
+
+        self.log.info(f"Generated {len(ideas)} fallback creative ideas.")
         return ideas
 
+
     def generate(self, df: pd.DataFrame) -> List[CreativeIdea]:
+        self.log.info("Starting creative generation pipeline.")
         low_df = self._find_low_ctr_campaigns(df)
+
         if low_df.empty:
+            self.log.warning("No low CTR campaigns found. Returning empty list.")
             return []
 
         payload = []
@@ -85,12 +103,15 @@ class CreativeAgent:
                 }
             )
 
+        self.log.debug(f"Payload for creative generation: {payload}")
+
         chain = self.prompt | self.llm | self.parser
         try:
             result = chain.invoke({"low_ctr": payload})
+            self.log.info("CreativeAgent LLM produced valid creative ideas.")
             if isinstance(result, list):
-                return result  # type: ignore[return-value]
+                return result
         except Exception as e:
-            logger.error(f"CreativeAgent LLM failed, using fallback creatives. Error: {e}")
+            self.log.error(f"CreativeAgent LLM failed, using fallback. Error: {e}")
 
         return self._fallback_creatives(df, low_df)

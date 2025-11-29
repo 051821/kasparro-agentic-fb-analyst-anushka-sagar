@@ -2,10 +2,7 @@ import pandas as pd
 
 
 def load_dataset(path: str) -> pd.DataFrame:
-    """Load and minimally preprocess the FB Ads dataset."""
     df = pd.read_csv(path)
-
-    # Basic safety: normalize column names
     df.columns = [c.strip() for c in df.columns]
 
     required = [

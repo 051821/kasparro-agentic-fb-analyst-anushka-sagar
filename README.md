@@ -34,7 +34,7 @@ reports/creatives.json
 
 reports/report.md
 
-📂 Project Structure
+# Project Structure
 .
 |-- README.md
 |-- config/
@@ -75,7 +75,7 @@ reports/report.md
 │   └── test_evl.py
 |-- venv/
 
-📊 Data Instructions
+Data Instructions
 
 Place your dataset inside the data/ folder:
 

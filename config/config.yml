@@ -1,6 +1,8 @@
 random_seed: 42
 use_sample_data: true
 
+enable_llm: true         
+
 data:
   path: "data/Synthetic_fb_ads.csv"
 
@@ -11,7 +13,7 @@ thresholds:
 
 llm:
   provider: "ollama"
-  model: "llama3.1"
+  model: "llama3"
   temperature: 0.2
   max_tokens: 2048
 
