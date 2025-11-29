@@ -12,7 +12,6 @@ def test_eval_agent_basic():
         "clicks": [10, 20],
         "spend": [100, 200],
         "revenue": [300, 400],
-        "purchases": [3, 4]
     })
 
     hypotheses = [{

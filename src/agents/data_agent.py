@@ -8,25 +8,31 @@ from utils.data_schema import SchemaValidator
 
 
 class DataAgent:
-    def __init__(self,config: Dict[str, Any]):
-        self.log = logger.bind(agent="data")  
+    def __init__(self, config: Dict[str, Any]):
+        self.log = logger.bind(agent="data")
         self.config = config
-    def run(self, config: Dict[str, Any]) -> Dict[str, Any]:
+
+    def run(self) -> Dict[str, Any]:
+        """Load dataset, validate schema, detect drift, summarize."""
         data_path = self.config["data"]["path"]
         self.log.info(f"Loading dataset from: {data_path}")
 
         try:
+            # Apply retry logic
             df = retry(
                 lambda: load_dataset(data_path),
                 attempts=self.config.get("retry", {}).get("attempts", 3),
                 delay=self.config.get("retry", {}).get("delay", 1.0),
                 agent="data"
             )
-            validator = SchemaValidator(config)
+
+            # Schema validation + drift
+            validator = SchemaValidator(self.config)
             validator.validate(df)
             validator.detect_drift(df)
 
             self.log.info(f"Dataset loaded successfully. Shape: {df.shape}")
+
             summary = dataset_summary(df)
             self.log.info("Dataset summary generated.")
 
@@ -34,4 +40,5 @@ class DataAgent:
 
         except Exception as e:
             self.log.error(f"Failed to load or summarize dataset. Error: {e}")
-            raise e  
+            raise
+

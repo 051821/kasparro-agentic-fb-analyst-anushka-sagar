@@ -9,17 +9,27 @@ def test_data_loading_and_summary():
     config = {
         "data": {
             "path": "data/Synthetic_fb_ads.csv"
+        },
+        "retry": {
+            "attempts": 1,
+            "delay": 0
+        },
+        "schema": {
+            "version": 1,
+            "expected_columns": [
+                "date", "spend", "impressions", "clicks", "revenue",
+                "ctr", "roas", "campaign_name", "creative_message"
+            ]
         }
     }
 
-    agent = DataAgent()
-    output = agent.run(config)
+    agent = DataAgent(config)     # ✅ FIXED
+    output = agent.run()          # ✅ FIXED
 
     assert "df" in output
     assert "summary" in output
 
     df = output["df"]
-    summary = output["summary"]
 
     assert isinstance(df, pd.DataFrame)
     assert "spend" in df.columns
