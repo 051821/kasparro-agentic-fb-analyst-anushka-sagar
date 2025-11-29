@@ -1,10 +1,8 @@
 import sys
 import os
 import yaml
-
 from utils.logger import configure_logging, logger
 from orchestrator.agent_control import AgentController
-
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 PARENT_DIR = os.path.dirname(CURRENT_DIR)
@@ -46,4 +44,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
