@@ -3,7 +3,7 @@ from typing import Callable , Any
 from loguru import logger
 
 def retry(operation : Callable, attempts : int = 3, delay : float = 1.0 , agent : str = "llm") -> Any:
-    Last_exp = None
+    last_exp = None
     log = logger.bind(agent=agent)
     for  a in range(1, attempts + 1):
         try:
