@@ -1,0 +1,42 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pdb
+*.pkl
+*.egg-info/
+*.egg
+*.log
+
+# ---------------------------
+# Virtual environment
+# ---------------------------
+venv/
+.env/
+ENV/
+env/
+.venv/
+
+.DS_Store
+Thumbs.db
+desktop.ini
+
+.pytest_cache/
+.coverage
+htmlcov/
+
+
+# ---------------------------
+# IDE / Editor configs
+# ---------------------------
+.vscode/
+.idea/
+*.code-workspace
+
+build/
+dist/
+*.spec
+
+.cache/
+.llm_cache/
+.llama/
