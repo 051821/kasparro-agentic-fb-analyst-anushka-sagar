@@ -6,7 +6,7 @@ import json
 from uuid import uuid4
 import yaml
 
-from utils.logger import configure_logging, bind_trace, logger
+from utils.logger import configure_logging, bind_trace
 from agents.planner_agent import PlannerAgent
 from agents.data_agent import DataAgent
 from agents.insight_agent import InsightAgent
@@ -33,7 +33,7 @@ class AgentController:
         root = bind_trace(trace_id=trace_id, agent="run")
 
         root.info({"event": "pipeline_start", "query": query})
-        plan = self.planner.plan(query, trace_id=trace_id)
+        self.planner.plan(query, trace_id=trace_id)
         data_bundle = self.data_agent.run(trace_id=trace_id)
         df = data_bundle["df"]
         summary = data_bundle["summary"]

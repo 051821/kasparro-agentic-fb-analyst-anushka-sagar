@@ -5,7 +5,6 @@ from utils.schemas import Hypothesis, EvaluatedHypothesis
 from utils.validate import filter_significant_segments, global_before_after_split
 from utils.metrics import agent_metrics
 from utils.logger import bind_trace
-import numpy as np
 
 log = logger.bind(agent="evaluate")
 

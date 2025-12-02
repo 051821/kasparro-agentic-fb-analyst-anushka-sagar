@@ -1,6 +1,5 @@
 from typing import Dict, Any
 from loguru import logger
-import pandas as pd
 
 from utils.load_data import load_dataset
 from utils.retry import retry

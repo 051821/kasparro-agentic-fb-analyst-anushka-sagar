@@ -3,9 +3,7 @@ import time
 import functools
 import traceback
 from uuid import uuid4
-from typing import Any, Callable, Optional, Dict
-
-from loguru import logger
+from typing import Callable, Dict
 from utils.logger import bind_trace
 
 

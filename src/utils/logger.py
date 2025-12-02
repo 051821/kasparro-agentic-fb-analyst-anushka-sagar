@@ -1,9 +1,6 @@
-# src/utils/logger.py
-
 from loguru import logger
 from pathlib import Path
 import os
-import sys
 from typing import Any, Optional
 
 DEFAULT_ROTATION = "2 MB"
