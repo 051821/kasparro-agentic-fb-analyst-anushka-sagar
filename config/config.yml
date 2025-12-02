@@ -1,0 +1,66 @@
+random_seed: 42
+use_sample_data: true
+enable_llm: true
+data:
+  path: "data/Synthetic_fb_ads.csv"
+
+thresholds:
+  roas_drop_pct: 0.25           # Expected ROAS drop to flag hypothesis confidence
+  ctr_drop_pct: 0.20            # Expected CTR drop threshold
+  min_impressions: 1000         # Minimum impression filter for reliable evaluation
+
+retry:
+  attempts: 4
+  delay: 5.0
+
+llm:
+  provider: "ollama"
+  model: "llama3"
+  temperature: 0.2
+  max_tokens: 2048
+  timeout: 120            
+  enable_json_mode: true  
+
+paths:
+  report_dir: "reports"
+  log_dir: "logs"
+  metrics_dir: "logs/metrics"  
+
+schema:
+  version: 2
+  strict: false      
+  detect_drift: true       
+  drift_threshold: 0.25
+  expected_columns:
+    - date
+    - spend
+    - impressions
+    - clicks
+    - ctr
+    - revenue
+    - roas
+    - campaign_name
+    - creative_message
+    - audience_type
+    - platform
+    - country
+
+observability:
+  trace_id_strategy: "uuid4"     
+  structured_logs: true          # Use JSON logs
+  log_agent_metrics: true        # Enable @agent_metrics decorator system
+  log_anomalies: true            # Log drift, schema errors, dropped signals
+  log_decisions: true            # Log insight/evaluator decision points
+  log_input_output_map: true     # Maps inputs → outputs per-agent
+  export_metrics_csv: true       # Used by logs_to_csv.py script
+  include_stack_traces: true     # Include traces for debugging
+
+fallback_policy:
+  planner: "auto"         
+  insights: "auto"
+  creatives: "auto"
+  on_llm_failure: "fallback"   
+
+runtime:
+  parallelism: 1          
+  timeout_seconds: 600   
