@@ -1,15 +1,15 @@
 # src/utils/exceptions.py
-class AgentError(Exception):
-    """Base class for agent errors."""
+class RetryableError(Exception):
+    pass
 
-class DataValidationError(AgentError):
-    """Raised when dataset fails validation or schema checks."""
+class FatalError(Exception):
+    pass
 
-class DriftDetectedWarning(AgentError):
-    """Non-fatal warning used to mark drift."""
+class DataValidationError(Exception):
+    pass
 
-class LLMError(AgentError):
-    """Raised when LLM calls fail repeatedly."""
+class DriftDetectedWarning(Warning):
+    pass
 
-class RetryLimitError(AgentError):
-    """Raised when retry attempts are exhausted."""
+class RetryLimitError(RetryableError):
+    pass

@@ -1,68 +1,113 @@
 # src/utils/metrics.py
+import os
+import csv
 import time
-import functools
-import traceback
-from uuid import uuid4
-from typing import Callable, Dict
-from utils.logger import bind_trace
+from functools import wraps
 
 
-def _size_meta(obj) -> Dict[str, int]:
-    """Estimate size of data structures for logging."""
-    meta = {}
-    try:
-        if hasattr(obj, "shape"):
-            meta["rows"] = obj.shape[0]
-        elif isinstance(obj, (list, tuple, set, dict)):
-            meta["len"] = len(obj)
-    except Exception:
-        pass
-    return meta
+METRICS_DIR = "logs/metrics"
+RUN_FILE = os.path.join(METRICS_DIR, "run_metrics.csv")
+TEST_FILE = os.path.join(METRICS_DIR, "test_metrics.csv")
+
+def is_pytest():
+    return "PYTEST_CURRENT_TEST" in os.environ
+
+
+def _ensure_files():
+    os.makedirs(METRICS_DIR, exist_ok=True)
+
+    # Choose correct file depending on mode
+    target_file = TEST_FILE if is_pytest() else RUN_FILE
+
+    if not os.path.exists(target_file):
+        with open(target_file, "w", newline="", encoding="utf-8") as f:
+            writer = csv.writer(f)
+            writer.writerow([
+                "timestamp",
+                "trace_id",
+                "agent",
+                "function",
+                "duration_ms",
+                "input_size",
+                "output_size",
+                "confidence",
+                "error_message"
+            ])
+
+    return target_file
+
+def _size(obj):
+    if obj is None:
+        return 0
+    if isinstance(obj, (str, bytes)):
+        return len(obj)
+    if hasattr(obj, "__len__"):
+        return len(obj)
+    return 1
+
+def _write_row(row):
+    target_file = _ensure_files()
+
+    with open(target_file, "a", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f)
+        writer.writerow(row)
 
 
 def agent_metrics(agent_name: str):
     """
-    Decorator that logs:
-    - start
-    - end
-    - duration
-    - input size
-    - output size
-    - trace_id
+    Decorator wrapping every agent function to log metrics.
     """
-
-    def decorator(fn: Callable):
-
-        @functools.wraps(fn)
+    def decorator(fn):
+        @wraps(fn)
         def wrapper(*args, **kwargs):
-            trace_id = kwargs.get("trace_id") or str(uuid4())
-            log = bind_trace(trace_id).bind(agent=agent_name, fn=fn.__name__)
-
             start = time.time()
-            log.info(f"[START] {fn.__name__}")
+            trace_id = kwargs.get("trace_id", "")
 
-            # Input size metadata
-            for idx, a in enumerate(args):
-                log.debug(f"input arg{idx} size: {_size_meta(a)}")
-            for key, val in kwargs.items():
-                if key != "trace_id":
-                    log.debug(f"input {key} size: {_size_meta(val)}")
+            input_size = sum(_size(a) for a in args)
+            input_size += sum(_size(v) for v in kwargs.values())
+
+            error_message = ""
+            confidence = ""
 
             try:
                 result = fn(*args, **kwargs)
-                end = time.time()
-                duration = round((end - start) * 1000, 2)
 
-                log.info(f"[END] {fn.__name__} | duration={duration}ms")
-                log.debug(f"output size: {_size_meta(result)}")
+                # If output contains "confidence"
+                if isinstance(result, dict):
+                    confidence = result.get("confidence", "")
+                elif isinstance(result, list) and result and isinstance(result[0], dict):
+                    confidence = result[0].get("confidence", "")
 
-                return result
+                output_size = _size(result)
 
             except Exception as e:
-                log.error(f"[ERROR] {fn.__name__} | {str(e)}")
-                log.error(traceback.format_exc())
+                result = None
+                output_size = 0
+                error_message = str(e)
+
+            end = time.time()
+            duration_ms = round((end - start) * 1000, 2)
+
+            timestamp = time.strftime("%d-%m-%Y %H:%M:%S")
+
+            row = [
+                timestamp,
+                trace_id,
+                agent_name,
+                fn.__name__,
+                duration_ms,
+                input_size,
+                output_size,
+                confidence,
+                error_message
+            ]
+
+            _write_row(row)
+
+            if error_message:
                 raise
 
-        return wrapper
+            return result
 
+        return wrapper
     return decorator

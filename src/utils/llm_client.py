@@ -1,9 +1,9 @@
-from langchain_community.llms import Ollama
+# src/utils/llm_client.py
+from langchain_community.chat_models import ChatOllama
 
-
-def get_llm(model: str = "llama3.1", temperature: float = 0.2):
-    return Ollama(
+def get_llm(model: str, temperature: float = 0.0, format: str = "json"):
+    return ChatOllama(
         model=model,
         temperature=temperature,
-        keep_alive="5m",  
+        format=format   
     )
