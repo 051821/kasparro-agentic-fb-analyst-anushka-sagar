@@ -1,68 +1,146 @@
 # src/orchestrator/agent_control.py
-
-from typing import Dict, Any
+from typing import Dict, Any, List
 import os
 import json
-from uuid import uuid4
-import yaml
+import uuid
+import time
 
-from utils.logger import configure_logging, bind_trace
+from utils.logger import bind_trace
 from agents.planner_agent import PlannerAgent
 from agents.data_agent import DataAgent
 from agents.insight_agent import InsightAgent
 from agents.eval_agent import EvalAgent
 from agents.creative_agent import CreativeAgent
-
-CONFIG_PATH = os.path.join("config", "config.yml")
-config = yaml.safe_load(open(CONFIG_PATH, "r", encoding="utf-8"))
-configure_logging(config["paths"]["log_dir"])     # <---- FIXED
+from utils.schemas import Hypothesis, EvaluatedHypothesis
 
 
 class AgentController:
     def __init__(self, config: Dict[str, Any]):
         self.config = config
-
-        self.planner = PlannerAgent(config)
+        self.planner = PlannerAgent({
+            **config.get("planner", {}),
+            "llm": config.get("llm", {})
+        })
         self.data_agent = DataAgent(config)
-        self.insight_agent = InsightAgent(config)
+        self.insight_agent = InsightAgent({
+            **config.get("insight", {}),
+            "llm": config.get("llm", {})
+        })
         self.eval_agent = EvalAgent()
-        self.creative_agent = CreativeAgent(config)
+        self.creative_agent = CreativeAgent({
+            **config.get("creative", {}),
+            "llm": config.get("llm", {})
+        })
 
-    def run(self, query: str) -> Dict[str, Any]:
-        trace_id = str(uuid4())
-        root = bind_trace(trace_id=trace_id, agent="run")
-
-        root.info({"event": "pipeline_start", "query": query})
-        self.planner.plan(query, trace_id=trace_id)
-        data_bundle = self.data_agent.run(trace_id=trace_id)
-        df = data_bundle["df"]
-        summary = data_bundle["summary"]
-        hypotheses = self.insight_agent.generate(
-            query, summary, trace_id=trace_id
-        )
-        insights = self.eval_agent.evaluate(
-            df,
-            hypotheses,
-            self.config.get("thresholds", {}),
-            trace_id=trace_id
-        )
-        creatives = self.creative_agent.generate(df, trace_id=trace_id)
+    def _translate_insights_to_hypotheses(self, raw_insights: List[Dict[str, Any]]) -> List[Hypothesis]:
+        out: List[Hypothesis] = []
+        for i, it in enumerate(raw_insights or []):
+            out.append({
+                "id": it.get("id") or f"H{i+1}",
+                "driver": it.get("driver") or it.get("metric") or "unknown",
+                "description": it.get("hypothesis") or it.get("description") or "",
+                "segment": it.get("segment") or it.get("segment_name") or "",
+                "expected_signals": it.get("expected_signals") or it.get("signals") or []
+            })
+        return out
+    def write_markdown_report(self, query: str, insights, creatives, trace_id, summary):
         report_dir = self.config["paths"].get("report_dir", "reports")
         os.makedirs(report_dir, exist_ok=True)
 
-        with open(os.path.join(report_dir, "insights.json"), "w", encoding="utf-8") as f:
-            json.dump(insights, f, indent=2)
+        md_path = os.path.join(report_dir, "report.md")
+        with open(md_path, "w", encoding="utf-8") as f:
+            f.write("# Ad Performance Diagnostic Report\n\n")
+            f.write(f"**Trace ID:** `{trace_id}`\n\n")
+            f.write(f"**Query:** {query}\n\n")
 
-        with open(os.path.join(report_dir, "creatives.json"), "w", encoding="utf-8") as f:
+            f.write("## Dataset Summary\n")
+            if isinstance(summary, dict):
+                totals = summary.get("totals", {})
+                f.write(f"- Date range: {summary.get('date_range')}\n")
+                f.write(f"- Total spend: {totals.get('spend', 0)}\n")
+                f.write(f"- Total revenue: {totals.get('revenue', 0)}\n")
+                f.write(f"- Overall ROAS: {totals.get('overall_roas', 0)}\n\n")
+
+            f.write("## Insights\n")
+            if insights:
+                for hyp in insights:
+                    f.write(f"### {hyp['id']}\n")
+                    f.write(f"- Driver: {hyp['driver']}\n")
+                    f.write(f"- Description: {hyp['description']}\n")
+                    f.write(f"- Segment: {hyp['segment']}\n")
+                    f.write(f"- Confidence: {hyp.get('confidence')}\n")
+                    f.write(f"- Evidence: {hyp.get('evidence')}\n\n")
+            else:
+                f.write("No insights.\n")
+
+            f.write("## Creative Recommendations\n")
+            if creatives:
+                for c in creatives:
+                    rec = c.get("recommendation", {})
+                    f.write(f"- Issue: {c.get('issue')}\n")
+                    f.write(f"  - Headline: {rec.get('headline')}\n")
+                    f.write(f"  - Primary text: {rec.get('primary_text')}\n")
+                    f.write(f"  - CTA: {rec.get('cta')}\n\n")
+            else:
+                f.write("No creatives.\n")
+
+            f.write("\n---\nGenerated by AgentController\n")
+
+        return md_path
+
+    def run(self, query: str, trace_id: str = None) -> Dict[str, Any]:
+        if trace_id is None:
+            trace_id = str(uuid.uuid4())
+        meta = {
+            "trace_id": trace_id,
+            "query": query,
+            "start_ts": time.time()
+        }
+
+        report_dir = self.config["paths"]["report_dir"]
+        os.makedirs(report_dir, exist_ok=True)
+        with open(os.path.join(report_dir, "trace_meta.json"), "w") as f:
+            json.dump(meta, f, indent=2)
+
+        log = bind_trace(trace_id).bind(agent="run")
+        log.info(json.dumps({"event": "pipeline_start", "query": query}))
+
+        # 1. Planner
+        plan = self.planner.plan(query, trace_id=trace_id)
+        with open(os.path.join(report_dir, "plan.json"), "w") as f:
+            json.dump(plan, f, indent=2)
+
+        # 2. Data loading
+        data_bundle = self.data_agent.run(trace_id=trace_id)
+        df = data_bundle["df"]
+        summary = data_bundle["summary"]
+
+        # 3. Insights
+        raw_insights = self.insight_agent.generate(query, summary, trace_id=trace_id)
+
+        # 4. Normalize for eval
+        hypotheses = self._translate_insights_to_hypotheses(raw_insights)
+
+        # 5. Evaluate insights
+        thresholds = self.config.get("thresholds", {})
+        evaluated = self.eval_agent.evaluate(df, hypotheses, thresholds, trace_id=trace_id)
+
+        # 6. Creative recommendations
+        creatives = self.creative_agent.generate(df, trace_id=trace_id)
+
+        # Save results
+        with open(os.path.join(report_dir, "insights.json"), "w") as f:
+            json.dump(evaluated, f, indent=2)
+
+        with open(os.path.join(report_dir, "creatives.json"), "w") as f:
             json.dump(creatives, f, indent=2)
 
-        with open(os.path.join(report_dir, "trace_meta.json"), "w", encoding="utf-8") as f:
-            json.dump({"trace_id": trace_id}, f, indent=2)
+        self.write_markdown_report(query, evaluated, creatives, trace_id, summary)
 
-        root.info({"event": "pipeline_end", "trace_id": trace_id})
+        log.info(json.dumps({"event": "pipeline_end", "trace_id": trace_id}))
 
         return {
-            "insights": insights,
+            "insights": evaluated,
             "creatives": creatives,
-            "trace_id": trace_id,
+            "trace_id": trace_id
         }
