@@ -1,25 +1,20 @@
+# src/run.py
 import sys
 import os
 import yaml
-from utils.logger import configure_logging, logger
+import json
+from utils.logger import configure_logging, bind_trace
 from orchestrator.agent_control import AgentController
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CONFIG_PATH = os.path.join(ROOT_DIR, "config", "config.yml")
 
-
 def load_config():
-    """Load config/config.yml safely."""
     if not os.path.exists(CONFIG_PATH):
         print(f"ERROR: Config file not found at {CONFIG_PATH}")
         sys.exit(1)
-    try:
-        with open(CONFIG_PATH, "r", encoding="utf-8") as f:
-            return yaml.safe_load(f)
-    except Exception as e:
-        print(f"Failed to load config: {e}")
-        sys.exit(1)
-
+    with open(CONFIG_PATH, "r", encoding="utf-8") as f:
+        return yaml.safe_load(f)
 
 def main():
     if len(sys.argv) < 2:
@@ -27,30 +22,27 @@ def main():
         sys.exit(1)
 
     query = sys.argv[1]
-
-    # Load config
     config = load_config()
-    log_dir = config["paths"].get("log_dir", "logs")
-    configure_logging(log_dir)        
 
-    run_log = logger.bind(agent="run")
-    run_log.info(f"Received query: {query}")
+    log_dir = config["paths"].get("log_dir", "logs")
+    configure_logging()
+
+    run_log = bind_trace().bind(agent="run")
+    run_log.info(json.dumps({"event": "received_query", "query": query}))
 
     controller = AgentController(config)
-
     try:
-        controller.run(query)
-        run_log.info("Run completed successfully.")
+        res = controller.run(query)
+        run_log.info(json.dumps({"event": "run_completed", "trace_id": res.get("trace_id")}))
     except Exception as e:
-        run_log.error(f"Run failed due to error: {e}")
-        raise  
+        run_log.info(json.dumps({"event": "run_failed", "error": str(e)}))
+        raise
 
     print("\nAnalysis complete!")
     print("➡ reports/insights.json")
     print("➡ reports/creatives.json")
     print("➡ reports/trace_meta.json")
-    print()
-
+    print("➡ reports/report.md")
 
 if __name__ == "__main__":
     main()
