@@ -1,0 +1,20 @@
+{
+  "original_query": "Analyze ROAS drop in last 7 days",
+  "task": "analyze_roas_change",
+  "steps": [
+    "load_data",
+    "summarize_dataset",
+    "generate_hypotheses",
+    "evaluate_hypotheses",
+    "generate_creatives_for_low_ctr",
+    "write_report"
+  ],
+  "focus": {
+    "time_window": "last_7_days",
+    "filters": {
+      "campaign_name_contains": [],
+      "country_in": [],
+      "audience_type_in": []
+    }
+  }
+}

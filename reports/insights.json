@@ -1,54 +1,9 @@
 [
   {
     "id": "H1",
-    "driver": "Ad Creative Refresh",
-    "description": "New ad creative introduced, potentially driving increased engagement and conversions.",
-    "segment": "Target Audience: Existing Customers",
-    "confidence": 0.5,
-    "evidence": {
-      "roas_before": 5.955871233654144,
-      "roas_after": 5.695933375827551,
-      "roas_change_pct": -0.04364396872077964,
-      "ctr_before": 0.012948897663462995,
-      "ctr_after": 0.012380958932209874,
-      "ctr_change_pct": -0.043860006157561526
-    }
-  },
-  {
-    "id": "H2",
-    "driver": "Budget Allocation Shift",
-    "description": "Increased budget allocation to specific ad sets, potentially driving more conversions and revenue.",
-    "segment": "Ad Set: Product A",
-    "confidence": 0.5,
-    "evidence": {
-      "roas_before": 5.955871233654144,
-      "roas_after": 5.695933375827551,
-      "roas_change_pct": -0.04364396872077964,
-      "ctr_before": 0.012948897663462995,
-      "ctr_after": 0.012380958932209874,
-      "ctr_change_pct": -0.043860006157561526
-    }
-  },
-  {
-    "id": "H3",
-    "driver": "Targeting Expansion",
-    "description": "Expanded targeting to new demographics, potentially driving increased reach and conversions.",
-    "segment": "Location: New York City",
-    "confidence": 0.5,
-    "evidence": {
-      "roas_before": 5.955871233654144,
-      "roas_after": 5.695933375827551,
-      "roas_change_pct": -0.04364396872077964,
-      "ctr_before": 0.012948897663462995,
-      "ctr_after": 0.012380958932209874,
-      "ctr_change_pct": -0.043860006157561526
-    }
-  },
-  {
-    "id": "H4",
-    "driver": "Ad Copy Optimization",
-    "description": "Improved ad copy and messaging, potentially driving increased engagement and conversions.",
-    "segment": "Target Audience: Lookalike Audiences",
+    "driver": "low_ctr",
+    "description": "CTR drop",
+    "segment": "",
     "confidence": 0.5,
     "evidence": {
       "roas_before": 5.955871233654144,

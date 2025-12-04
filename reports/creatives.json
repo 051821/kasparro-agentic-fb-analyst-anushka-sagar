@@ -1,42 +1,57 @@
 [
   {
-    "campaign_name": "Summer Sale",
-    "issue": "Low CTR vs threshold",
-    "current_message": "Get ready for summer with our exclusive deals!",
+    "campaign_name": " OMEN COTTON CLASSICS",
+    "issue": "Low CTR",
+    "current_message": "",
     "recommendation": {
-      "headline": "Beat the Heat with Our Summer Sale!",
-      "primary_text": "Don't let the sun get you down! Shop now and enjoy up to 50% off on select items.",
-      "cta": "Shop Now"
-    }
+      "headline": "Try benefit-driven headline for  OMEN COTTON CLASSICS",
+      "primary_text": "Highlight benefit + clear CTA.",
+      "cta": "Learn More"
+    },
+    "confidence": 0.4
   },
   {
-    "campaign_name": "New Arrivals",
-    "issue": "Low CTR vs threshold",
-    "current_message": "Discover our latest fashion trends!",
+    "campaign_name": "-omen-Studio Sports",
+    "issue": "Low CTR",
+    "current_message": "",
     "recommendation": {
-      "headline": "Fresh Faces: Our Latest Fashion Must-Haves!",
-      "primary_text": "Stay ahead of the curve with our newest arrivals! Shop now and get free shipping on orders over $50.",
-      "cta": "Shop Now"
-    }
+      "headline": "Try benefit-driven headline for -omen-Studio Sports",
+      "primary_text": "Highlight benefit + clear CTA.",
+      "cta": "Learn More"
+    },
+    "confidence": 0.4
   },
   {
-    "campaign_name": "Black Friday",
-    "issue": "Low CTR vs threshold",
-    "current_message": "Don't miss out on our biggest sale of the year!",
+    "campaign_name": "M-n Bold Colors Drop",
+    "issue": "Low CTR",
+    "current_message": "",
     "recommendation": {
-      "headline": "Black Friday Blowout: Exclusive Deals Inside!",
-      "primary_text": "Get ready to score big! Shop now and enjoy doorbuster deals, flash sales, and more.",
-      "cta": "Shop Now"
-    }
+      "headline": "Try benefit-driven headline for M-n Bold Colors Drop",
+      "primary_text": "Highlight benefit + clear CTA.",
+      "cta": "Learn More"
+    },
+    "confidence": 0.4
   },
   {
-    "campaign_name": "Gift Guide",
-    "issue": "Low CTR vs threshold",
-    "current_message": "Find the perfect gift for your loved ones!",
+    "campaign_name": "MEN  Signture  Soft",
+    "issue": "Low CTR",
+    "current_message": "",
     "recommendation": {
-      "headline": "Gift Guide: Our Top Picks for the Holidays!",
-      "primary_text": "Make this holiday season one to remember! Browse our curated selection of gifts and get free shipping on orders over $100.",
-      "cta": "Shop Now"
-    }
+      "headline": "Try benefit-driven headline for MEN  Signture  Soft",
+      "primary_text": "Highlight benefit + clear CTA.",
+      "cta": "Learn More"
+    },
+    "confidence": 0.4
+  },
+  {
+    "campaign_name": "MEN B LD COLORS DROP",
+    "issue": "Low CTR",
+    "current_message": "",
+    "recommendation": {
+      "headline": "Try benefit-driven headline for MEN B LD COLORS DROP",
+      "primary_text": "Highlight benefit + clear CTA.",
+      "cta": "Learn More"
+    },
+    "confidence": 0.4
   }
 ]
