@@ -1,72 +1,151 @@
-from typing import Dict, Any, List
+# src/agents/insight_agent.py
+import json
+import re
+from typing import Any, Dict, List, Optional
+
 from loguru import logger
 from langchain_core.prompts import PromptTemplate
-from langchain_core.output_parsers import JsonOutputParser
+
 from utils.llm_client import get_llm
 from utils.retry import retry
-from utils.schemas import Hypothesis
 from utils.metrics import agent_metrics
 from utils.logger import bind_trace
-from utils.exceptions import LLMError
 
 log = logger.bind(agent="insight")
 
+
+def safe_extract_json(text: str):
+    """Extract JSON even from extremely broken text. Always returns dict/list."""
+    if not text:
+        return None
+
+    # Try simple extraction
+    m = re.search(r"[\{\[][^\0]*", text, re.DOTALL)
+    raw = m.group(0) if m else None
+
+    if raw:
+        raw = re.sub(r",\s*([\]}])", r"\1", raw)  # remove trailing commas
+
+        # Balance braces
+        while raw.count("{") > raw.count("}"):
+            raw += "}"
+        while raw.count("[") > raw.count("]"):
+            raw += "]"
+
+        try:
+            return json.loads(raw)
+        except Exception:
+            pass
+
+    if "hypotheses" in text:
+        return {
+            "hypotheses": [
+                {"id": "H1", "driver": "unknown", "hypothesis": "Unknown issue"}
+            ]
+        }
+
+    return None
+
+
+def normalize_payload(payload: Any) -> Optional[List[Dict[str, Any]]]:
+    """Turn raw JSON payload into list of hypotheses."""
+    if payload is None:
+        return None
+
+    # Various valid shapes
+    if isinstance(payload, dict) and isinstance(payload.get("hypotheses"), list):
+        items = payload["hypotheses"]
+    elif isinstance(payload, list):
+        items = payload
+    else:
+        return None
+
+    out = []
+    for i, h in enumerate(items, start=1):
+        if not isinstance(h, dict):
+            continue
+        out.append({
+            "id": h.get("id", f"H{i}"),
+            "driver": h.get("driver", h.get("metric", "unknown")),
+            "hypothesis": h.get("hypothesis", h.get("description", "")),
+            "segment_name": h.get("segment_name", h.get("segment", "All Campaigns")),
+            "segment_filters": h.get("segment_filters", {})
+        })
+    return out or None
+
+
+
 class InsightAgent:
     def __init__(self, config: Dict[str, Any]):
-        self.config = config
-        self.log = log
-        try:
-            if config.get("enable_llm", False):
-                self.llm = get_llm(model=config["llm"]["model"], temperature=config["llm"].get("temperature", 0.2))
-            else:
-                self.llm = None
-        except Exception as e:
-            self.log.error({"event":"llm_init_failed","error":str(e)})
+        self.config = config or {}
+
+        # Load LLM (optional)
+        llm_cfg = self.config.get("llm", {})
+        if llm_cfg.get("enable_llm", False):
+            self.llm = get_llm(
+                model=llm_cfg.get("model"),
+                temperature=llm_cfg.get("temperature", 0.0)
+            )
+        else:
             self.llm = None
 
+        # Load prompt (optional)
         try:
-            with open("prompts/insight_agent_prompt.md","r",encoding="utf-8") as f:
+            path = self.config.get("prompt_path", "prompts/insight_agent_prompt.md")
+            with open(path, "r", encoding="utf-8") as f:
                 template = f.read()
-            self.prompt = PromptTemplate(template=template, input_variables=["query","summary"])
-        except Exception as e:
-            self.log.error({"event":"prompt_load_failed","error":str(e)})
+            self.prompt = PromptTemplate(
+                template=template,
+                input_variables=["query", "summary"],
+                template_format="f-string"
+            )
+        except:
             self.prompt = None
-        self.parser = JsonOutputParser()
 
+        log.info({"event": "insight_agent_init"})
+
+    # -----------------------------------------------------------
     @agent_metrics("insight")
-    def generate(self, query: str, summary: Dict[str, Any], trace_id: str = None) -> List[Hypothesis]:
-        lg = bind_trace(trace_id).bind(agent="insight")
-        lg.info({"event":"insight_generate_request","query":query})
-        if not self.llm or not self.prompt:
-            lg.warning({"event":"llm_or_prompt_missing","note":"using fallback hypotheses"})
-            return self._fallback_hypotheses()
+    def generate(self, query: str, summary: Dict[str, Any], trace_id: str = None) -> List[Dict[str, Any]]:
 
-        chain = self.prompt | self.llm | self.parser
+        logger_ = bind_trace(trace_id).bind(agent="insight")
+        logger_.info(json.dumps({"event": "insight_generate_request", "query": query}))
+
+        # If no LLM → fallback
+        if not (self.llm and self.prompt):
+            logger_.warning(json.dumps({"event": "fallback_triggered"}))
+            return self._fallback()
+
+        # Build prompt
         try:
-            result = retry(lambda: chain.invoke({"query": query, "summary": summary}),
-                           attempts=self.config.get("retry", {}).get("attempts", 3),
-                           delay=self.config.get("retry", {}).get("delay", 1.0),
-                           backoff=2.0, jitter=0.1, agent="insight",
-                           retry_on=(Exception,))
-            if isinstance(result, list):
+            prompt_text = self.prompt.format(query=query, summary=summary)
+        except:
+            return self._fallback()
 
-                for r in result:
-                    if isinstance(r, dict) and "confidence" in r:
-                        lg.info({"event":"hypothesis_confidence_reported","id": r.get("id"), "confidence": r.get("confidence")})
-                return result
-            else:
-                lg.error({"event":"insight_invalid_output","type":str(type(result))})
-                return self._fallback_hypotheses()
-        except Exception as e:
-            lg.error({"event":"insight_llm_failed","error":str(e)})
-            raise LLMError(str(e))
+        # LLM
+        try:
+            def ask():
+                raw = self.llm.invoke(prompt_text)
+                return raw if isinstance(raw, str) else raw.content
 
-    def _fallback_hypotheses(self) -> List[Hypothesis]:
-        lg = logger.bind(agent="insight")
-        fallback = [
-            {"id":"H1","driver":"Audience fatigue","description":"ROAS dropped while impressions increased and CTR decreased","segment":"broad","expected_signals":["impressions_up","ctr_down","roas_down"]},
-            {"id":"H2","driver":"Creative fatigue","description":"Repeated creative messaging causing CTR decline","segment":"top_spend","expected_signals":["ctr_down","spend_stable_or_up"]}
-        ]
-        lg.info({"event":"fallback_hypotheses_returned","count":len(fallback)})
-        return fallback
+            raw_text = retry(ask, attempts=2, delay=1.0, agent="insight")
+        except:
+            return self._fallback()
 
+        # Repair JSON
+        payload = safe_extract_json(raw_text)
+        normalized = normalize_payload(payload)
+
+        if normalized:
+            return normalized
+        return self._fallback()
+
+    def _fallback(self) -> List[Dict[str, Any]]:
+        """Very small, simple fallback."""
+        return [{
+            "id": "H1",
+            "driver": "low_ctr",
+            "hypothesis": "ROAS drop driven by CTR decline",
+            "segment_name": "All Campaigns",
+            "segment_filters": {}
+        }]

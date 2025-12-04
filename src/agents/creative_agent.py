@@ -1,8 +1,9 @@
+# src/agents/creative_agent.py
 from typing import Dict, Any, List
 from loguru import logger
 import pandas as pd
-from langchain_core.prompts import PromptTemplate
-from langchain_core.output_parsers import JsonOutputParser
+import json, re
+
 from utils.llm_client import get_llm
 from utils.retry import retry
 from utils.metrics import agent_metrics
@@ -11,70 +12,87 @@ from utils.schemas import CreativeIdea
 
 log = logger.bind(agent="creative")
 
+def safe_json(text: str):
+    if not text:
+        return None
+    m = re.search(r"\{[\s\S]*", text)
+    if not m:
+        return None
+    raw = m.group(0)
+    if raw.count("{") > raw.count("}"):
+        raw += "}" * (raw.count("{") - raw.count("}"))
+    if raw.count("[") > raw.count("]"):
+        raw += "]" * (raw.count("[") - raw.count("]"))
+    try:
+        return json.loads(raw)
+    except:
+        return None
+
 class CreativeAgent:
     def __init__(self, config: Dict[str, Any]):
         self.config = config
-        self.log = log
         try:
             if config.get("enable_llm", False):
-                self.llm = get_llm(model=config["llm"]["model"], temperature=config["llm"].get("temperature",0.2))
+                self.llm = get_llm(model=config["llm"]["model"], temperature=config["llm"].get("temperature", 0.0), format=config["llm"].get("format"))
             else:
                 self.llm = None
         except Exception as e:
-            self.log.error({"event":"llm_init_failed","error":str(e)})
+            log.error({"event": "creative_llm_init_failed", "error": str(e)})
             self.llm = None
 
         try:
-            with open("prompts/creative_generator_prompt.md","r",encoding="utf-8") as f:
+            with open("prompts/creative_generator_prompt.md", "r", encoding="utf-8") as f:
                 template = f.read()
-            self.prompt = PromptTemplate(template=template, input_variables=["low_ctr"])
-            self.parser = JsonOutputParser()
+            # simple templating via f-string format
+            self.template = template
         except Exception as e:
-            self.log.error({"event":"creative_prompt_load_failed","error":str(e)})
-            self.prompt = None
-            self.parser = None
-
-    def _find_low_ctr_campaigns(self, df: pd.DataFrame, threshold: float = 0.01) -> pd.DataFrame:
-        grouped = df.groupby("campaign_name").agg(impressions=("impressions","sum"), clicks=("clicks","sum"), spend=("spend","sum")).reset_index()
-        grouped["ctr"] = grouped["clicks"] / grouped["impressions"].replace(0,1)
-        return grouped[grouped["ctr"] < threshold]
-
-    def _fallback(self, df: pd.DataFrame, low_df: pd.DataFrame) -> List[CreativeIdea]:
-        ideas = []
-        for _, r in low_df.head(5).iterrows():
-            cname = r["campaign_name"]
-            rec = {"headline": f"Try a fresh angle for {cname}", "primary_text": "Highlight benefits + short CTA", "cta":"Learn More"}
-            ideas.append({"campaign_name": cname, "issue":"Low CTR", "current_message":"", "recommendation":rec})
-        self.log.info({"event":"fallback_creatives_generated","count":len(ideas)})
-        return ideas
+            log.error({"event": "creative_prompt_load_failed", "error": str(e)})
+            self.template = None
 
     @agent_metrics("creative")
     def generate(self, df: pd.DataFrame, trace_id: str = None) -> List[CreativeIdea]:
         lg = bind_trace(trace_id).bind(agent="creative")
-        low = self._find_low_ctr_campaigns(df)
+        grouped = df.groupby("campaign_name").agg(impressions=("impressions", "sum"), clicks=("clicks", "sum"), spend=("spend", "sum")).reset_index()
+        grouped["ctr"] = grouped["clicks"] / grouped["impressions"].replace(0, 1)
+        low = grouped[grouped["ctr"] < 0.01]
+
         if low.empty:
-            lg.info({"event":"no_low_ctr"})
+            lg.info(json.dumps({"event": "no_low_ctr"}))
             return []
 
-        payload = []
-        for _, r in low.head(5).iterrows():
-            payload.append({"campaign_name": r["campaign_name"], "ctr": float(r["ctr"])})
+        payload = [{"campaign_name": r["campaign_name"], "ctr": float(r["ctr"])} for _, r in low.head(5).iterrows()]
 
-        lg.debug({"event":"creative_payload_size","size":len(payload)})
-        if not (self.llm and self.prompt and self.parser):
-            return self._fallback(df, low)
+        if not (self.llm and self.template):
+            return self._fallback(low)
 
         try:
-            chain = self.prompt | self.llm | self.parser
-            result = retry(lambda: chain.invoke({"low_ctr": payload}),
-                           attempts=self.config.get("retry", {}).get("attempts", 3),
-                           delay=self.config.get("retry", {}).get("delay", 1.0),
-                           backoff=2.0, jitter=0.1, agent="creative")
-            if isinstance(result, list):
-                lg.info({"event":"creative_generated","count":len(result)})
-                return result
-            lg.error({"event":"creative_invalid_output"})
-            return self._fallback(df, low)
+            def _invoke():
+                prompt_text = self.template.format(low_ctr=payload)
+                raw = self.llm.invoke(prompt_text)
+                raw_text = raw if isinstance(raw, str) else getattr(raw, "content", "")
+                return raw_text
+            raw_text = retry(_invoke, attempts=self.config.get("retry", {}).get("attempts", 3), delay=self.config.get("retry", {}).get("delay", 1.0), agent="creative")
+            parsed = safe_json(raw_text)
+            if parsed and isinstance(parsed, dict) and "campaigns" in parsed:
+                campaigns = parsed["campaigns"]
+                # attach light confidence if present
+                for c in campaigns:
+                    if "confidence" not in c:
+                        c["confidence"] = 0.5
+                lg.info(json.dumps({"event": "creative_generated", "count": len(campaigns)}))
+                return campaigns
+            else:
+                lg.error(json.dumps({"event": "creative_invalid_output"}))
+                return self._fallback(low)
         except Exception as e:
-            lg.error({"event":"creative_llm_failed","error":str(e)})
-            return self._fallback(df, low)
+            lg.error(json.dumps({"event": "creative_llm_failed", "error": str(e)}))
+            return self._fallback(low)
+
+    def _fallback(self, low_df: pd.DataFrame) -> List[CreativeIdea]:
+        ideas = []
+        for _, r in low_df.head(5).iterrows():
+            cname = r["campaign_name"]
+            rec = {"headline": f"Try benefit-driven headline for {cname}", "primary_text": "Highlight benefit + clear CTA.", "cta": "Learn More"}
+            ideas.append({"campaign_name": cname, "issue": "Low CTR", "current_message": "", "recommendation": rec, "confidence": 0.4})
+        log.info(json.dumps({"event": "creative_fallback_generated", "count": len(ideas)}))
+        return ideas
