@@ -1,8 +1,8 @@
 [
   {
     "id": "H1",
-    "driver": "low_ctr",
-    "description": "CTR drop",
+    "driver": "creative_fatigue",
+    "description": "The drop in ROAS is due to creative fatigue, as the same ads have been running for a prolonged period.",
     "segment": "",
     "confidence": 0.5,
     "evidence": {

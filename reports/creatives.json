@@ -1,57 +1,12 @@
 [
   {
     "campaign_name": " OMEN COTTON CLASSICS",
-    "issue": "Low CTR",
-    "current_message": "",
+    "issue": "low_ctr",
+    "diagnosed_driver": "weak_hook",
     "recommendation": {
-      "headline": "Try benefit-driven headline for  OMEN COTTON CLASSICS",
-      "primary_text": "Highlight benefit + clear CTA.",
-      "cta": "Learn More"
-    },
-    "confidence": 0.4
-  },
-  {
-    "campaign_name": "-omen-Studio Sports",
-    "issue": "Low CTR",
-    "current_message": "",
-    "recommendation": {
-      "headline": "Try benefit-driven headline for -omen-Studio Sports",
-      "primary_text": "Highlight benefit + clear CTA.",
-      "cta": "Learn More"
-    },
-    "confidence": 0.4
-  },
-  {
-    "campaign_name": "M-n Bold Colors Drop",
-    "issue": "Low CTR",
-    "current_message": "",
-    "recommendation": {
-      "headline": "Try benefit-driven headline for M-n Bold Colors Drop",
-      "primary_text": "Highlight benefit + clear CTA.",
-      "cta": "Learn More"
-    },
-    "confidence": 0.4
-  },
-  {
-    "campaign_name": "MEN  Signture  Soft",
-    "issue": "Low CTR",
-    "current_message": "",
-    "recommendation": {
-      "headline": "Try benefit-driven headline for MEN  Signture  Soft",
-      "primary_text": "Highlight benefit + clear CTA.",
-      "cta": "Learn More"
-    },
-    "confidence": 0.4
-  },
-  {
-    "campaign_name": "MEN B LD COLORS DROP",
-    "issue": "Low CTR",
-    "current_message": "",
-    "recommendation": {
-      "headline": "Try benefit-driven headline for MEN B LD COLORS DROP",
-      "primary_text": "Highlight benefit + clear CTA.",
-      "cta": "Learn More"
-    },
-    "confidence": 0.4
+      "headline": "Elevate Your Style with Omen Cotton Classics",
+      "primary_text": "Discover the perfect blend of comfort and sophistication in our premium cotton collection. From timeless designs to statement pieces, find your new wardrobe staples.",
+      "cta": "Shop Now"
+    }
   }
 ]

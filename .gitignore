@@ -4,18 +4,22 @@ __pycache__/
 *.pyd
 *.pdb
 *.pkl
+
 *.egg-info/
 *.egg
-*.log
+build/
+dist/
+*.spec
 
-# ---------------------------
-# Virtual environment
-# ---------------------------
+*.log
+logs/
+!logs/readme.md
+
 venv/
-.env/
-ENV/
-env/
 .venv/
+env/
+ENV/
+.env/
 
 .DS_Store
 Thumbs.db
@@ -25,18 +29,18 @@ desktop.ini
 .coverage
 htmlcov/
 
-
-# ---------------------------
-# IDE / Editor configs
-# ---------------------------
 .vscode/
 .idea/
 *.code-workspace
 
-build/
-dist/
-*.spec
 
 .cache/
 .llm_cache/
 .llama/
+
+*.bin
+*.ckpt
+*.pt
+*.onnx
+
+.ipynb_checkpoints/

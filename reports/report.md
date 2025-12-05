@@ -1,6 +1,6 @@
 # Ad Performance Diagnostic Report
 
-**Trace ID:** `5160dbbf-a689-443c-8d02-217f4f91c181`
+**Trace ID:** `3f03e29b-0101-4a09-a122-456eb0d51c82`
 
 **Query:** Analyze ROAS drop in last 7 days
 
@@ -12,37 +12,17 @@
 
 ## Insights
 ### H1
-- Driver: low_ctr
-- Description: CTR drop
+- Driver: creative_fatigue
+- Description: The drop in ROAS is due to creative fatigue, as the same ads have been running for a prolonged period.
 - Segment: 
 - Confidence: 0.5
 - Evidence: {'roas_before': 5.955871233654144, 'roas_after': 5.695933375827551, 'roas_change_pct': -0.04364396872077964, 'ctr_before': 0.012948897663462995, 'ctr_after': 0.012380958932209874, 'ctr_change_pct': -0.043860006157561526}
 
 ## Creative Recommendations
-- Issue: Low CTR
-  - Headline: Try benefit-driven headline for  OMEN COTTON CLASSICS
-  - Primary text: Highlight benefit + clear CTA.
-  - CTA: Learn More
-
-- Issue: Low CTR
-  - Headline: Try benefit-driven headline for -omen-Studio Sports
-  - Primary text: Highlight benefit + clear CTA.
-  - CTA: Learn More
-
-- Issue: Low CTR
-  - Headline: Try benefit-driven headline for M-n Bold Colors Drop
-  - Primary text: Highlight benefit + clear CTA.
-  - CTA: Learn More
-
-- Issue: Low CTR
-  - Headline: Try benefit-driven headline for MEN  Signture  Soft
-  - Primary text: Highlight benefit + clear CTA.
-  - CTA: Learn More
-
-- Issue: Low CTR
-  - Headline: Try benefit-driven headline for MEN B LD COLORS DROP
-  - Primary text: Highlight benefit + clear CTA.
-  - CTA: Learn More
+- Issue: low_ctr
+  - Headline: Elevate Your Style with Omen Cotton Classics
+  - Primary text: Discover the perfect blend of comfort and sophistication in our premium cotton collection. From timeless designs to statement pieces, find your new wardrobe staples.
+  - CTA: Shop Now
 
 
 ---

@@ -11,24 +11,29 @@ from agents.data_agent import DataAgent
 from agents.insight_agent import InsightAgent
 from agents.eval_agent import EvalAgent
 from agents.creative_agent import CreativeAgent
-from utils.schemas import Hypothesis, EvaluatedHypothesis
-
+from utils.schemas import Hypothesis
+import os
 
 class AgentController:
     def __init__(self, config: Dict[str, Any]):
         self.config = config
+        is_testing = os.getenv("PYTEST_ACTIVE") == "1"
+        enable = False if is_testing else config.get("llm", {}).get("enable_llm", True)
         self.planner = PlannerAgent({
             **config.get("planner", {}),
+            "enable_llm": enable,
             "llm": config.get("llm", {})
         })
         self.data_agent = DataAgent(config)
         self.insight_agent = InsightAgent({
             **config.get("insight", {}),
+            "enable_llm": enable,
             "llm": config.get("llm", {})
         })
         self.eval_agent = EvalAgent()
         self.creative_agent = CreativeAgent({
             **config.get("creative", {}),
+            "enable_llm": enable,
             "llm": config.get("llm", {})
         })
 
