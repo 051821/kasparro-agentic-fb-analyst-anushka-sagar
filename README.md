@@ -120,23 +120,23 @@ pytest src/tests/ -v  # Runs in seconds, no LLM calls
 
 ## Why This Demonstrates Engineering Excellence
 
-### 🎯 Problem Solving
+###  Problem Solving
 - Solves real marketing problems (ROAS drops, low CTR)
 - Generates actionable recommendations, not just insights
 - Mimics how human analysts actually work
 
-### 🏗️ Architecture
+###  Architecture
 - Clean separation of concerns (each agent is independent)
 - Config-driven (easy to modify without code changes)
 - Modular design (agents can be swapped or extended)
 
-### 🛡️ Reliability
+###  Reliability
 - Multiple layers of error handling
 - Fallback strategies at every step
 - Comprehensive logging for debugging
 - Test coverage with CI/CD
 
-### 📊 Observability
+###  Observability
 - Per-agent execution metrics
 - Trace IDs for debugging
 - Confidence scoring throughout pipeline
@@ -191,10 +191,10 @@ make lint  # Code quality checks
 ```
 
 ### GitHub Actions Pipeline
-- ✅ Automatic linting on commit
-- ✅ Full test suite execution
-- ✅ Fail-fast if quality drops
-- ✅ Python 3.12 environment matching production
+-  Automatic linting on commit
+-  Full test suite execution
+-  Fail-fast if quality drops
+-  Python 3.12 environment matching production
 
 ---
 
@@ -224,16 +224,16 @@ make lint         # Check code quality
 
 ## What This Project Demonstrates
 
-✅ **Multi-Agent AI Systems** - Coordinated agents with specialized roles  
-✅ **Production Engineering** - Error handling, logging, monitoring  
-✅ **LLM Integration** - Prompt engineering, JSON parsing, retry logic  
-✅ **Software Engineering** - Testing, CI/CD, code quality  
-✅ **Problem Solving** - Real business value, actionable outputs  
-✅ **System Design** - Modular, maintainable, scalable architecture  
+ **Multi-Agent AI Systems** - Coordinated agents with specialized roles  
+ **Production Engineering** - Error handling, logging, monitoring ,Exception handling, Drift       dectection, validation 
+ **LLM Integration** - Prompt engineering, JSON parsing, retry logic  
+ **Software Engineering** - Testing, CI/CD, code quality  
+ **Problem Solving** - Real business value, actionable outputs  
+ **System Design** - Modular, maintainable, scalable architecture  
 
 ---
 
-## Status: Production Ready ✅
+## Status: Production Ready 
 
 This system is stable, tested, and ready for real workloads. It demonstrates the ability to:
 - Design and implement complex AI systems
