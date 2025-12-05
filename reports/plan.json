@@ -1,5 +1,5 @@
 {
-  "summary": "Analyze the cause of ROAS drop in last 7 days",
+  "summary": "Analyze the cause of ROAS drop over the last 7 days",
   "time_windows": {
     "before": {
       "start_date": "2023-02-14",
@@ -38,7 +38,7 @@
     {
       "name": "video_vs_image",
       "filters": {
-        "ad_format": [
+        "creative_type": [
           "video",
           "image"
         ]
@@ -47,18 +47,18 @@
   ],
   "hypotheses": [
     {
-      "description": "ROAS drop due to CTR decline in video creatives",
+      "metric": "roas",
       "segment_filters": {
         "creative_type": "video"
       },
-      "metric": "ctr"
+      "direction": "decline"
     },
     {
-      "description": "ROAS drop due to CPM spike in prospecting",
+      "metric": "cpm",
       "segment_filters": {
         "creative_type": "prospecting"
       },
-      "metric": "cpm"
+      "direction": "increase"
     }
   ]
 }

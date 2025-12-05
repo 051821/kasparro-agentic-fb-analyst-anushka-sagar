@@ -1,6 +1,6 @@
 # Ad Performance Diagnostic Report
 
-**Trace ID:** `3f03e29b-0101-4a09-a122-456eb0d51c82`
+**Trace ID:** `30da8eea-aa58-4328-b859-b2fa418fab38`
 
 **Query:** Analyze ROAS drop in last 7 days
 
@@ -12,8 +12,8 @@
 
 ## Insights
 ### H1
-- Driver: creative_fatigue
-- Description: The drop in ROAS is due to creative fatigue, as the same ads have been running for a prolonged period.
+- Driver: auction_pressure
+- Description: Increased competition in the ad auctions may have driven up costs and reduced ROAS.
 - Segment: 
 - Confidence: 0.5
 - Evidence: {'roas_before': 5.955871233654144, 'roas_after': 5.695933375827551, 'roas_change_pct': -0.04364396872077964, 'ctr_before': 0.012948897663462995, 'ctr_after': 0.012380958932209874, 'ctr_change_pct': -0.043860006157561526}
@@ -21,7 +21,7 @@
 ## Creative Recommendations
 - Issue: low_ctr
   - Headline: Elevate Your Style with Omen Cotton Classics
-  - Primary text: Discover the perfect blend of comfort and sophistication in our premium cotton collection. From timeless designs to statement pieces, find your new wardrobe staples.
+  - Primary text: Discover timeless pieces that blend comfort and sophistication. From casual wear to dressy occasions, our cotton classics have got you covered.
   - CTA: Shop Now
 
 

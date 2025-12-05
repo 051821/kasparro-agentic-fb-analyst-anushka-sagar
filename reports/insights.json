@@ -1,8 +1,8 @@
 [
   {
     "id": "H1",
-    "driver": "creative_fatigue",
-    "description": "The drop in ROAS is due to creative fatigue, as the same ads have been running for a prolonged period.",
+    "driver": "auction_pressure",
+    "description": "Increased competition in the ad auctions may have driven up costs and reduced ROAS.",
     "segment": "",
     "confidence": 0.5,
     "evidence": {
