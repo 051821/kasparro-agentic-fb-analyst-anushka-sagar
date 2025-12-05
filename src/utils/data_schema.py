@@ -1,48 +1,110 @@
 # src/utils/data_schema.py
-from loguru import logger
+import numpy as np
 import pandas as pd
-from typing import Dict, Any, List
+from typing import Dict, Any
+from loguru import logger
+from utils.exceptions import DataValidationError, DriftDetectedWarning
+
 
 class SchemaValidator:
     def __init__(self, config: Dict[str, Any]):
-        self.schema_version = config.get("schema", {}).get("version", 1)
-        self.expected_columns = set(config.get("schema", {}).get("expected_columns", []))
-        self.strict = config.get("schema", {}).get("strict", False)
-        self.log = logger.bind(agent="schema")
+        self.config = config or {}
+        self.schema_cfg = self.config.get("schema", {})
+        self.expected_columns = self.schema_cfg.get("expected_columns", [])
+        self.strict = self.schema_cfg.get("strict", False)
 
-    def validate(self, df: pd.DataFrame) -> None:
-        self.log.info(f"Validating dataset against schema v{self.schema_version}")
-        actual = set(df.columns)
-        missing = self.expected_columns - actual
-        extra = actual - self.expected_columns
-        if missing:
-            self.log.error({"event": "missing_columns", "missing": list(missing)})
-            raise ValueError(f"Missing required columns: {missing}")
-        if extra:
-            self.log.warning({"event": "extra_columns", "extra": list(extra)})
-            if self.strict:
-                raise ValueError(f"Unexpected extra columns: {extra}")
-        self.log.info("Schema validation passed")
+    def validate(self, df: pd.DataFrame) -> Dict[str, Any]:
+        log = logger.bind(agent="schema")
 
-    def detect_drift(self, df: pd.DataFrame, drift_threshold: float = 0.25) -> List[Dict[str, Any]]:
-        self.log.info("Running drift detection")
-        numeric_cols = [c for c in ["spend", "impressions", "clicks", "revenue", "ctr", "roas"] if c in df.columns]
-        if "date" not in df.columns or df["date"].isna().all():
-            self.log.warning("No date column or all dates missing; skipping drift detection")
-            return []
-        mid = df["date"].median()
-        before = df[df["date"] <= mid]
-        after = df[df["date"] > mid]
-        issues = []
-        for col in numeric_cols:
-            before_mean = before[col].mean() if not before.empty else 0.0
-            after_mean = after[col].mean() if not after.empty else 0.0
-            if before_mean == 0:
-                continue
-            shift = abs((after_mean - before_mean) / before_mean)
-            if shift > drift_threshold:
-                issues.append({"column": col, "shift": shift})
-                self.log.warning({"event": "drift", "column": col, "shift_pct": shift * 100.0})
+        df_cols = set(df.columns)
+        expected_cols = set(self.expected_columns)
+
+        missing = list(expected_cols - df_cols)
+        extra = list(df_cols - expected_cols)
+        dtype_mismatches = []
+        expected_dtypes = self.schema_cfg.get("expected_dtypes", {})
+
+        for col, exp_type in expected_dtypes.items():
+            if col in df.columns:
+                actual = df[col].dtype
+                if str(actual) != str(exp_type):
+                    dtype_mismatches.append({
+                        "column": col,
+                        "expected": exp_type,
+                        "actual": str(actual)
+                    })
+        null_issues = {}
+        null_threshold = self.schema_cfg.get("null_threshold", 0.5)
+        for col in df.columns:
+            null_ratio = df[col].isna().mean()
+            if null_ratio > null_threshold:
+                null_issues[col] = round(null_ratio, 3)
+
+        # Detailed log
+        log.info({
+            "event": "schema_validation_report",
+            "missing_columns": missing,
+            "extra_columns": extra,
+            "dtype_mismatches": dtype_mismatches,
+            "null_ratios_above_threshold": null_issues
+        })
+
+        if self.strict and missing:
+            raise DataValidationError(f"Missing required columns: {missing}")
+        if dtype_mismatches:
+            log.warning({
+                "event": "schema_dtype_mismatch_detected",
+                "details": dtype_mismatches
+            })
+
+        return {
+            "missing_columns": missing,
+            "extra_columns": extra,
+            "dtype_mismatches": dtype_mismatches,
+            "null_issues": null_issues
+        }
+    def detect_drift(self, df: pd.DataFrame, drift_threshold: float = 0.25) -> Dict[str, float]:
+        log = logger.bind(agent="schema")
+
+        drift_report = {}
+        baseline_path = self.schema_cfg.get("baseline_path", "schema_baseline.json")
+
+        try:
+            import json, os
+            if os.path.exists(baseline_path):
+                with open(baseline_path, "r") as f:
+                    baseline = json.load(f)
             else:
-                self.log.debug({"event": "no_drift", "column": col, "shift_pct": shift * 100.0})
-        return issues
+                baseline = {}
+        except:
+            baseline = {}
+        numeric_cols = df.select_dtypes(include=[np.number]).columns
+
+        for col in numeric_cols:
+            new_mean = float(df[col].mean())
+            old_mean = baseline.get(col, new_mean)
+
+            if old_mean != 0:
+                shift_pct = abs(new_mean - old_mean) / abs(old_mean)
+            else:
+                shift_pct = 0
+            baseline[col] = new_mean
+            if shift_pct > drift_threshold:
+                drift_report[col] = round(shift_pct, 4)
+            log.info({
+                "event": "drift_score",
+                "column": col,
+                "new_mean": new_mean,
+                "old_mean": old_mean,
+                "shift_pct": shift_pct
+            })
+        try:
+            with open(baseline_path, "w") as f:
+                json.dump(baseline, f, indent=2)
+        except:
+            pass
+
+        if drift_report and self.strict:
+            raise DriftDetectedWarning(f"Critical drift: {drift_report}")
+
+        return drift_report

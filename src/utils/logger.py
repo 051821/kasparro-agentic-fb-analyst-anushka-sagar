@@ -15,26 +15,16 @@ AGENTS = [
 def is_pytest_running() -> bool:
     return "PYTEST_CURRENT_TEST" in os.environ
 
-
-# Always resolve path to project root (folder above src/)
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 LOG_ROOT = PROJECT_ROOT / "logs"
 
 
 def configure_logging() -> None:
-    """
-    Create log folders in logs/run/ or logs/tests/
-    Always at project root.
-    """
-
     mode = "tests" if is_pytest_running() else "run"
     log_dir = LOG_ROOT / mode
     log_dir.mkdir(parents=True, exist_ok=True)
 
-    # Remove previous handlers
     logger.remove()
-
-    # MASTER LOG — contains logs of ALL agents
     master_path = log_dir / "run.log"
     logger.add(
         master_path,
