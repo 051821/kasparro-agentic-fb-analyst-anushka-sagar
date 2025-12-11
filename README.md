@@ -1,6 +1,5 @@
 # Facebook Ads Intelligence System 
 
-**Applied AI Engineer Assignment — Kasparro**  
 **Author:** Anushka Sagar
 
 > A production-ready multi-agent system that analyzes Facebook Ads performance like a human Marketing Analyst—automatically diagnosing issues and recommending improvements.
