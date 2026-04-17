@@ -1,3 +1,5 @@
+"""Project file: src/utils/summary.py."""
+
 from typing import Dict, Any
 import pandas as pd
 

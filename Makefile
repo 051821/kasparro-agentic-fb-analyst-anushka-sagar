@@ -1,3 +1,5 @@
+# Project file: Makefile
+
 PYTHON := python
 QUERY ?= Analyze ROAS drop in last 7 days
 

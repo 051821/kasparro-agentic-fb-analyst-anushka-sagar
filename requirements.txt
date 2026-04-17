@@ -1,3 +1,5 @@
+# Project file: requirements.txt
+
 # === CORE ===
 pandas==2.2.2
 numpy==1.26.4
@@ -29,3 +31,21 @@ tenacity==8.3.0
 # === TESTING ===
 pytest==8.3.2
 pytest-cov==5.0.0
+
+
+# ===Backend====
+fastapi
+uvicorn
+sqlalchemy
+pydantic
+pydantic-settings
+alembic
+psycopg2-binary
+python-dotenv
+
+passlib[bcrypt]==1.7.4
+bcrypt==4.0.1
+python-jose[cryptography]
+python-multipart
+
+email-validator

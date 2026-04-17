@@ -1,3 +1,5 @@
+"""Project file: src/utils/retry.py."""
+
 import time
 import random
 from loguru import logger

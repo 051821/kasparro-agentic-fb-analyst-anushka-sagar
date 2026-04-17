@@ -1,3 +1,5 @@
+"""Project file: src/utils/load_data.py."""
+
 import pandas as pd
 
 

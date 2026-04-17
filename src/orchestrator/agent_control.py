@@ -1,3 +1,5 @@
+"""Project file: src/orchestrator/agent_control.py."""
+
 # src/orchestrator/agent_control.py
 from typing import Dict, Any, List
 import os

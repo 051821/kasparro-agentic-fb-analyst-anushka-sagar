@@ -1,3 +1,5 @@
+<!-- Project file: prompts/evaluator_agent_prompt.md -->
+
 You are the Evaluator Agent.  
 Validate hypotheses using numeric evidence.
 

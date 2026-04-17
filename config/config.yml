@@ -1,3 +1,5 @@
+# Project file: config/config.yml
+
 paths:
   log_dir: "logs"
   report_dir: "reports"

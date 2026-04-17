@@ -1,3 +1,5 @@
+"""Project file: src/utils/validate.py."""
+
 from typing import Dict, Any, Tuple
 import pandas as pd
 

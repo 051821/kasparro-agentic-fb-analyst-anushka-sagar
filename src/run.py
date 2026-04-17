@@ -1,3 +1,5 @@
+"""Project file: src/run.py."""
+
 # src/run.py
 import sys
 import os

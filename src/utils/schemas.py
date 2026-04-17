@@ -1,3 +1,5 @@
+"""Project file: src/utils/schemas.py."""
+
 from typing import TypedDict, List, Dict, Any
 
 
