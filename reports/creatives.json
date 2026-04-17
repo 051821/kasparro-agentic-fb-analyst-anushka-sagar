@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 [
   {
     "campaign_name": " OMEN COTTON CLASSICS",
@@ -9,4 +10,17 @@
       "cta": "Shop Now"
     }
   }
+=======
+[
+  {
+    "campaign_name": " OMEN COTTON CLASSICS",
+    "issue": "low_ctr",
+    "diagnosed_driver": "weak_hook",
+    "recommendation": {
+      "headline": "Elevate Your Style with Omen Cotton Classics",
+      "primary_text": "Discover timeless pieces that blend comfort and sophistication. From casual wear to dressy occasions, our cotton classics have got you covered.",
+      "cta": "Shop Now"
+    }
+  }
+>>>>>>> 098e76f (Better logig system with input/output)
 ]

@@ -42,7 +42,13 @@ class AgentController:
             "llm": config.get("llm", {})
         })
 
+<<<<<<< HEAD
 
+=======
+    # -----------------------------------------------------
+    # TRANSLATION HELPERS
+    # -----------------------------------------------------
+>>>>>>> 098e76f (Better logig system with input/output)
     def _translate_insights_to_hypotheses(
         self, raw_insights: List[Dict[str, Any]]
     ) -> List[Hypothesis]:
@@ -59,7 +65,13 @@ class AgentController:
             })
         return out
 
+<<<<<<< HEAD
 
+=======
+    # -----------------------------------------------------
+    # REPORT WRITER
+    # -----------------------------------------------------
+>>>>>>> 098e76f (Better logig system with input/output)
     def write_markdown_report(self, query: str, insights, creatives, trace_id, summary):
         report_dir = self.config["paths"].get("report_dir", "reports")
         os.makedirs(report_dir, exist_ok=True)
@@ -106,6 +118,9 @@ class AgentController:
 
         return md_path
 
+    # -----------------------------------------------------
+    # MAIN PIPELINE CONTROLLER (V2 LOGGING)
+    # -----------------------------------------------------
     def run(self, query: str, trace_id: str = None) -> Dict[str, Any]:
 
         if trace_id is None:
@@ -125,13 +140,25 @@ class AgentController:
 
         log = bind_trace(trace_id).bind(agent="run")
 
+<<<<<<< HEAD
+=======
+        # -----------------------------
+        # PIPELINE START
+        # -----------------------------
+>>>>>>> 098e76f (Better logig system with input/output)
         log.info({
             "event": "pipeline_start",
             "trace_id": trace_id,
             "query": query
         })
 
+<<<<<<< HEAD
 
+=======
+        # -----------------------------
+        # 1. PLANNER
+        # -----------------------------
+>>>>>>> 098e76f (Better logig system with input/output)
         t0 = time.time()
         plan = self.planner.plan(query, trace_id=trace_id)
 
@@ -146,6 +173,12 @@ class AgentController:
         with open(os.path.join(report_dir, "plan.json"), "w") as f:
             json.dump(plan, f, indent=2)
 
+<<<<<<< HEAD
+=======
+        # -----------------------------
+        # 2. DATA AGENT
+        # -----------------------------
+>>>>>>> 098e76f (Better logig system with input/output)
         t0 = time.time()
         data_bundle = self.data_agent.run(trace_id=trace_id)
 
@@ -160,7 +193,13 @@ class AgentController:
             "num_columns": len(df.columns)
         })
 
+<<<<<<< HEAD
 
+=======
+        # -----------------------------
+        # 3. INSIGHT AGENT
+        # -----------------------------
+>>>>>>> 098e76f (Better logig system with input/output)
         t0 = time.time()
         raw_insights = self.insight_agent.generate(query, summary, trace_id=trace_id)
 
@@ -171,6 +210,12 @@ class AgentController:
             "num_raw_insights": len(raw_insights)
         })
 
+<<<<<<< HEAD
+=======
+        # -----------------------------
+        # 4. TRANSLATE TO HYPOTHESES
+        # -----------------------------
+>>>>>>> 098e76f (Better logig system with input/output)
         hypotheses = self._translate_insights_to_hypotheses(raw_insights)
 
         log.info({
@@ -179,6 +224,12 @@ class AgentController:
             "num_hypotheses": len(hypotheses)
         })
 
+<<<<<<< HEAD
+=======
+        # -----------------------------
+        # 5. EVALUATE HYPOTHESES
+        # -----------------------------
+>>>>>>> 098e76f (Better logig system with input/output)
         thresholds = self.config.get("thresholds", {})
 
         t0 = time.time()
@@ -191,7 +242,13 @@ class AgentController:
             "num_evaluated": len(evaluated)
         })
 
+<<<<<<< HEAD
 
+=======
+        # -----------------------------
+        # 6. CREATIVE AGENT
+        # -----------------------------
+>>>>>>> 098e76f (Better logig system with input/output)
         t0 = time.time()
         creatives = self.creative_agent.generate(df, trace_id=trace_id)
 
@@ -202,6 +259,12 @@ class AgentController:
             "num_creatives": len(creatives)
         })
 
+<<<<<<< HEAD
+=======
+        # -----------------------------
+        # SAVE RESULTS
+        # -----------------------------
+>>>>>>> 098e76f (Better logig system with input/output)
         with open(os.path.join(report_dir, "insights.json"), "w") as f:
             json.dump(evaluated, f, indent=2)
 
@@ -211,6 +274,12 @@ class AgentController:
         # Report
         self.write_markdown_report(query, evaluated, creatives, trace_id, summary)
 
+<<<<<<< HEAD
+=======
+        # -----------------------------
+        # PIPELINE END
+        # -----------------------------
+>>>>>>> 098e76f (Better logig system with input/output)
         log.info({
             "event": "pipeline_end",
             "trace_id": trace_id,
